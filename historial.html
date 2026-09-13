@@ -6,16 +6,19 @@
 <title>Historial — Comunidad AoE II</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="css/estilo.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-  .jornada-block { margin-bottom: 22px; }
-  .jornada-block > h3 { color: var(--gold); font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
-  .match-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
-  .match-card .cabecera { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
-  .match-card .cabecera .titulo { font-weight: 600; font-size: 0.88rem; }
+  .match-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+  .match-card .cabecera { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap: 10px; }
+  .match-card .cabecera .titulo { font-family:'Cinzel',serif; color: var(--gold); font-size: 0.95rem; }
+  .match-card .cabecera .acciones { display:flex; align-items:center; gap:10px; }
   .match-card .cabecera .dur { font-size: 0.78rem; color: var(--text-dim); }
-  .fila-jugador { display:grid; grid-template-columns: 20px 1fr auto; gap:8px; align-items:center; padding:6px 0; border-bottom: 1px solid var(--line); font-size: 0.85rem; }
-  .fila-jugador:last-child { border-bottom: none; }
-  .fila-jugador .bonos { font-size: 0.7rem; color: var(--patina-bright); }
+  .match-card .cabecera button { background: var(--panel-raised); border: 1px solid var(--line); color: var(--text); border-radius: var(--radius); padding: 4px 8px; font-size: 0.75rem; cursor: pointer; }
+  table.tabla-match { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  table.tabla-match th, table.tabla-match td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+  table.tabla-match th { color: var(--text-dim); font-weight: 600; font-size: 0.72rem; }
+  table.tabla-match tr:last-child td { border-bottom: none; }
+  .resultado-icono { font-size: 0.95rem; margin-right: 6px; }
 </style>
 </head>
 <body>
@@ -38,8 +41,11 @@
 
 <main>
   <div class="filters">
-    <select id="filtro-periodo"></select>
+    <select id="filtro-anio"></select>
+    <select id="filtro-mes"></select>
+    <select id="filtro-jornada"></select>
   </div>
+  <p class="hint" id="nota-limite" style="margin-bottom:12px;"></p>
   <div id="lista-historial"></div>
 </main>
 
@@ -54,74 +60,121 @@
 
 <script src="js/datos.js"></script>
 <script>
+const LIMITE_PARTIDAS_DEFAULT = 10;
 let PARTIDAS = [], EQUIVALENCIAS = [];
 
-function render() {
-  const periodo = document.getElementById("filtro-periodo").value;
-  const filtradas = PARTIDAS.filter(p => clavePeriodo(p) === periodo)
-    .sort((a, b) => claveOrden(b) - claveOrden(a));
+function poblarFiltros() {
+  const anios = [...new Set(PARTIDAS.map(p => p.anio))].sort((a, b) => b - a);
+  const selAnio = document.getElementById("filtro-anio");
+  selAnio.innerHTML = anios.length ? anios.map(a => `<option value="${a}">${a}</option>`).join("") : `<option value="">Sin datos</option>`;
+  selAnio.addEventListener("change", () => { poblarMeses(); poblarJornadas(); render(); });
+  poblarMeses();
+  document.getElementById("filtro-mes").addEventListener("change", () => { poblarJornadas(); render(); });
+  document.getElementById("filtro-jornada").addEventListener("change", render);
+}
 
+function poblarMeses() {
+  const anio = document.getElementById("filtro-anio").value;
+  const meses = [...new Set(PARTIDAS.filter(p => p.anio == anio).map(p => String(p.mes).padStart(2, "0")))].sort().reverse();
+  const selMes = document.getElementById("filtro-mes");
+  selMes.innerHTML = meses.length ? meses.map(m => `<option value="${m}">${NOMBRES_MES[m]}</option>`).join("") : `<option value="">Sin datos</option>`;
+  poblarJornadas();
+}
+
+function poblarJornadas() {
+  const anio = document.getElementById("filtro-anio").value;
+  const mes = document.getElementById("filtro-mes").value;
+  const jornadas = [...new Set(PARTIDAS.filter(p => p.anio == anio && String(p.mes).padStart(2,"0") === mes).map(p => p.jornada))]
+    .sort((a, b) => numeroDeJornada(a) - numeroDeJornada(b));
+  const selJornada = document.getElementById("filtro-jornada");
+  selJornada.innerHTML = `<option value="">Todas las fechas</option>` + jornadas.map(j => `<option value="${j}">${j}</option>`).join("");
+}
+
+function render() {
+  const anio = document.getElementById("filtro-anio").value;
+  const mes = document.getElementById("filtro-mes").value;
+  const jornadaFiltro = document.getElementById("filtro-jornada").value;
   const cont = document.getElementById("lista-historial");
-  if (filtradas.length === 0) {
-    cont.innerHTML = `<div class="empty-state">No hay partidas registradas para este período.</div>`;
+  const nota = document.getElementById("nota-limite");
+
+  if (!anio || !mes) {
+    cont.innerHTML = `<div class="empty-state">No hay partidas registradas todavía.</div>`;
+    nota.textContent = "";
     return;
   }
 
-  // Agrupar por jornada, conservando el orden ya descendente
-  const grupos = [];
-  filtradas.forEach(p => {
-    let grupo = grupos.find(g => g.jornada === p.jornada);
-    if (!grupo) { grupo = { jornada: p.jornada, partidas: [] }; grupos.push(grupo); }
-    grupo.partidas.push(p);
-  });
+  const delPeriodo = PARTIDAS.filter(p => p.anio == anio && String(p.mes).padStart(2, "0") === mes)
+    .sort((a, b) => claveOrden(a) - claveOrden(b));
 
-  cont.innerHTML = grupos.map(g => `
-    <div class="jornada-block">
-      <h3>${g.jornada}</h3>
-      ${g.partidas.map(p => `
-        <div class="match-card">
-          <div class="cabecera">
-            <span class="titulo">Partida ${p.numeroPartida}</span>
-            <span class="dur">${formatearDuracion(p.duracionSeg)}</span>
-          </div>
+  const varsPorPartida = calcularVarPorPartida(delPeriodo, EQUIVALENCIAS);
+
+  let filtradas = jornadaFiltro ? delPeriodo.filter(p => p.jornada === jornadaFiltro) : delPeriodo;
+  filtradas = [...filtradas].sort((a, b) => claveOrden(b) - claveOrden(a));
+
+  if (!jornadaFiltro && filtradas.length > LIMITE_PARTIDAS_DEFAULT) {
+    nota.textContent = `Mostrando las últimas ${LIMITE_PARTIDAS_DEFAULT} partidas de ${NOMBRES_MES[mes]} ${anio}. Selecciona una Fecha específica para ver el resto.`;
+    filtradas = filtradas.slice(0, LIMITE_PARTIDAS_DEFAULT);
+  } else {
+    nota.textContent = "";
+  }
+
+  if (filtradas.length === 0) {
+    cont.innerHTML = `<div class="empty-state">No hay partidas para este filtro.</div>`;
+    return;
+  }
+
+  cont.innerHTML = filtradas.map(p => {
+    const varsDeEsta = varsPorPartida[p.id] || {};
+    return `
+    <div class="match-card" id="card-${p.id}">
+      <div class="cabecera">
+        <span class="titulo">${etiquetaPartida(p)}</span>
+        <div class="acciones">
+          <span class="dur">⏱ ${formatearDuracion(p.duracionSeg)}</span>
+          <button onclick="descargarImagenPartida('${p.id}')">📷 Descargar</button>
+        </div>
+      </div>
+      <table class="tabla-match">
+        <thead><tr><th></th><th>Jugador</th><th>Equipo</th><th>Civilización</th><th>Var</th></tr></thead>
+        <tbody>
           ${p.jugadores.map(j => {
             const nombreOf = resolverNombreOficial(j.nombre, EQUIVALENCIAS);
             const gano = j.resultado === "victoria";
-            const bonosTexto = (j.bonos || []).map(b => ETIQUETAS_BONO[b] || b).join(", ");
+            const v = varsDeEsta[nombreOf] ?? 0;
+            const varClass = v > 0 ? "var-up" : v < 0 ? "var-down" : "";
+            const varTexto = v > 0 ? `+${v}` : `${v}`;
             return `
-              <div class="fila-jugador">
-                <span class="match-badge ${gano ? 'win' : 'loss'}"></span>
-                <span>
-                  <a href="jugador.html?nombre=${encodeURIComponent(nombreOf)}">${nombreOf}</a>
-                  <span style="color:var(--text-dim); font-size:0.78rem;"> — ${j.civ || "—"} ${j.equipo ? "· " + j.equipo : ""}</span>
-                  ${bonosTexto ? `<div class="bonos">${bonosTexto}</div>` : ""}
-                </span>
-                <span style="font-size:0.78rem; color:var(--text-dim);">${j.unidadesAsesinadas || 0} un. / ${j.edificiosArrasados || 0} ed.</span>
-              </div>
+              <tr>
+                <td><span class="resultado-icono">${gano ? "👑" : "💀"}</span></td>
+                <td><a href="jugador.html?nombre=${encodeURIComponent(nombreOf)}">${nombreOf}</a></td>
+                <td>${j.equipo || "—"}</td>
+                <td>${j.civ || "—"}</td>
+                <td class="${varClass}">${varTexto}</td>
+              </tr>
             `;
           }).join("")}
-        </div>
-      `).join("")}
+        </tbody>
+      </table>
     </div>
-  `).join("");
+  `;
+  }).join("");
 }
 
-function poblarFiltro() {
-  const select = document.getElementById("filtro-periodo");
-  const claves = [...new Set(PARTIDAS.map(clavePeriodo))].sort().reverse();
-  if (claves.length === 0) {
-    select.innerHTML = `<option value="">Sin partidas</option>`;
-    return;
-  }
-  select.innerHTML = claves.map(c => `<option value="${c}">${nombrePeriodo(c)}</option>`).join("");
-  select.addEventListener("change", render);
+function descargarImagenPartida(id) {
+  const el = document.getElementById(`card-${id}`);
+  html2canvas(el, { backgroundColor: "#1c2027", scale: 2 }).then(canvas => {
+    const enlace = document.createElement("a");
+    enlace.href = canvas.toDataURL("image/png");
+    enlace.download = `partida-${id}.png`;
+    enlace.click();
+  });
 }
 
 (async function init() {
   const datos = await cargarDatos();
   PARTIDAS = datos.partidas;
   EQUIVALENCIAS = datos.equivalencias;
-  poblarFiltro();
+  poblarFiltros();
   render();
 })();
 </script>

@@ -3,9 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clasificacion — Comunidad AoE II</title>
+<title>Clasificación — Comunidad AoE II</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="css/estilo.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  .tabla-detallada { width: 100%; border-collapse: collapse; font-size: 0.78rem; background: var(--panel); }
+  .tabla-detallada th, .tabla-detallada td { padding: 7px 8px; border: 1px solid var(--line); text-align: center; white-space: nowrap; }
+  .tabla-detallada th { background: var(--panel-raised); color: var(--gold); font-weight: 600; font-size: 0.72rem; }
+  .tabla-detallada td.jugador { text-align: left; font-weight: 600; }
+  .tabla-detallada td.jugador a { color: var(--text); }
+  .tabla-detallada tfoot td { background: var(--panel-raised); font-weight: 700; }
+  .var-up { color: var(--win); }
+  .var-down { color: var(--loss); }
+  .bono-cell.activo { color: var(--loss); font-weight: 700; }
+  .bono-cell.inactivo { color: var(--text-dim); }
+  .toolbar-clasif { display:flex; justify-content: space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom: 10px; }
+</style>
 </head>
 <body>
 
@@ -26,17 +40,22 @@
 </header>
 
 <main>
-  <div class="section-head">
-    <h2>Tabla de posiciones</h2>
-    <span class="meta" id="resumen-periodo"></span>
+  <div class="toolbar-clasif">
+    <h2 id="titulo-jornada">Tabla de posiciones</h2>
+    <button class="btn secondary" onclick="descargarImagen()">📷 Descargar Imagen</button>
   </div>
 
   <div class="filters">
-    <select id="filtro-periodo"></select>
+    <select id="filtro-anio"></select>
+    <select id="filtro-mes"></select>
+    <select id="filtro-jornada"></select>
+    <span class="meta" id="resumen-periodo"></span>
   </div>
 
-  <div id="contenedor-standings" class="standings">
-    <div class="empty-state">Cargando…</div>
+  <div id="captura-clasificacion">
+    <div id="contenedor-standings">
+      <div class="empty-state">Cargando…</div>
+    </div>
   </div>
 </main>
 
@@ -51,60 +70,139 @@
 
 <script src="js/datos.js"></script>
 <script>
-let TODAS_LAS_PARTIDAS = [];
-let EQUIVALENCIAS = [];
+let PARTIDAS = [], EQUIVALENCIAS = [];
 
-function poblarFiltroPeriodo() {
-  const select = document.getElementById("filtro-periodo");
-  const claves = [...new Set(TODAS_LAS_PARTIDAS.map(clavePeriodo))].sort().reverse();
-  if (claves.length === 0) {
-    select.innerHTML = `<option value="">Sin partidas</option>`;
-    return;
-  }
-  select.innerHTML = claves.map(c => `<option value="${c}">${nombrePeriodo(c)}</option>`).join("");
-  select.addEventListener("change", renderizar);
+function poblarFiltros() {
+  const anios = [...new Set(PARTIDAS.map(p => p.anio))].sort((a, b) => b - a);
+  const selAnio = document.getElementById("filtro-anio");
+  selAnio.innerHTML = anios.length
+    ? anios.map(a => `<option value="${a}">${a}</option>`).join("")
+    : `<option value="">Sin datos</option>`;
+
+  selAnio.addEventListener("change", () => { poblarMeses(); poblarJornadas(); renderizar(); });
+  poblarMeses();
+
+  document.getElementById("filtro-mes").addEventListener("change", () => { poblarJornadas(); renderizar(); });
+  document.getElementById("filtro-jornada").addEventListener("change", renderizar);
+}
+
+function poblarMeses() {
+  const anio = document.getElementById("filtro-anio").value;
+  const meses = [...new Set(PARTIDAS.filter(p => p.anio == anio).map(p => String(p.mes).padStart(2, "0")))].sort().reverse();
+  const selMes = document.getElementById("filtro-mes");
+  selMes.innerHTML = meses.length
+    ? meses.map(m => `<option value="${m}">${NOMBRES_MES[m]}</option>`).join("")
+    : `<option value="">Sin datos</option>`;
+  poblarJornadas();
+}
+
+function poblarJornadas() {
+  const anio = document.getElementById("filtro-anio").value;
+  const mes = document.getElementById("filtro-mes").value;
+  const jornadas = [...new Set(PARTIDAS.filter(p => p.anio == anio && String(p.mes).padStart(2,"0") === mes).map(p => p.jornada))]
+    .sort((a, b) => numeroDeJornada(a) - numeroDeJornada(b));
+  const selJornada = document.getElementById("filtro-jornada");
+  selJornada.innerHTML = `<option value="">Todo el mes (acumulado)</option>` +
+    jornadas.map(j => `<option value="${j}">Hasta ${j}</option>`).join("");
+}
+
+function celdaBono(valor) {
+  return `<span class="bono-cell ${valor > 0 ? 'activo' : 'inactivo'}">${valor}</span>`;
 }
 
 function renderizar() {
-  const periodo = document.getElementById("filtro-periodo").value;
-  const partidasDelPeriodo = TODAS_LAS_PARTIDAS.filter(p => clavePeriodo(p) === periodo);
+  const anio = document.getElementById("filtro-anio").value;
+  const mes = document.getElementById("filtro-mes").value;
+  const jornada = document.getElementById("filtro-jornada").value;
 
-  document.getElementById("resumen-periodo").textContent =
-    `${partidasDelPeriodo.length} partida${partidasDelPeriodo.length === 1 ? "" : "s"} registrada${partidasDelPeriodo.length === 1 ? "" : "s"}`;
-
-  const stats = calcularEstadisticasJugadores(partidasDelPeriodo, EQUIVALENCIAS);
-  const lista = Object.values(stats).sort((a, b) => b.puntos - a.puntos);
-
-  const cont = document.getElementById("contenedor-standings");
-
-  if (lista.length === 0) {
-    cont.innerHTML = `<div class="empty-state">No hay partidas registradas para este período todavía.</div>`;
+  if (!anio || !mes) {
+    document.getElementById("contenedor-standings").innerHTML = `<div class="empty-state">No hay partidas registradas todavía.</div>`;
     return;
   }
 
-  cont.innerHTML = lista.map((j, i) => {
-    const rankClass = i === 0 ? "rank-1" : i === 1 ? "rank-2" : i === 2 ? "rank-3" : "";
-    return `
-      <div class="standings-row ${rankClass}">
-        <div class="rank-num">${i + 1}</div>
-        <div class="player-cell">
-          <div class="name"><a href="jugador.html?nombre=${encodeURIComponent(j.nombre)}">${j.nombre}</a></div>
-          <div class="subline">${j.victorias}V - ${j.derrotas}D</div>
-        </div>
-        <div class="stat-cell">
-          <span class="vpj">${j.partidas} PJ</span>
-          <span class="pts">${j.puntos}</span>
-        </div>
-      </div>
-    `;
-  }).join("");
+  const { filas, jornadaMostrada, totalPartidas } = calcularTablaClasificacion(PARTIDAS, EQUIVALENCIAS, anio, mes, jornada || null);
+
+  document.getElementById("titulo-jornada").textContent = jornadaMostrada ? `Hasta ${jornadaMostrada}` : "Tabla de posiciones";
+  document.getElementById("resumen-periodo").textContent = `${totalPartidas} partida(s) consideradas`;
+
+  const cont = document.getElementById("contenedor-standings");
+  if (filas.length === 0) {
+    cont.innerHTML = `<div class="empty-state">No hay partidas para este período.</div>`;
+    return;
+  }
+
+  const totales = { E:0,R:0,M:0,O:0,S:0,Rch:0,MG:0,RLP:0 };
+  let totalPts = 0, totalTB = 0;
+  filas.forEach(f => {
+    totalPts += f.puntos; totalTB += f.tb;
+    Object.keys(totales).forEach(k => totales[k] += f.bonos[k]);
+  });
+
+  cont.innerHTML = `
+    <div style="overflow-x:auto;">
+      <table class="tabla-detallada">
+        <thead>
+          <tr>
+            <th>Pos</th><th>Var</th><th style="text-align:left;">Jugador</th><th>Pts</th><th>V/PJ</th>
+            <th style="text-align:left;">Último Suceso</th><th>V/D</th>
+            <th>E</th><th>R</th><th>M</th><th>O</th><th>S</th><th>Rch</th><th>MG</th><th>RLP</th><th>TB</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filas.map((f, i) => {
+            const varClass = f.variacion > 0 ? "var-up" : f.variacion < 0 ? "var-down" : "";
+            const varTexto = f.variacion > 0 ? `+${f.variacion}` : `${f.variacion}`;
+            return `
+              <tr>
+                <td>${i + 1}</td>
+                <td class="${varClass}">${varTexto}</td>
+                <td class="jugador"><a href="jugador.html?nombre=${encodeURIComponent(f.nombre)}">${f.nombre}</a></td>
+                <td>${f.puntos}</td>
+                <td>${f.victorias}/${f.partidas}</td>
+                <td style="text-align:left; font-style:italic; color: var(--text-dim);">${f.ultimoSuceso}</td>
+                <td>${f.vd}</td>
+                <td>${celdaBono(f.bonos.E)}</td>
+                <td>${celdaBono(f.bonos.R)}</td>
+                <td>${celdaBono(f.bonos.M)}</td>
+                <td>${celdaBono(f.bonos.O)}</td>
+                <td>${celdaBono(f.bonos.S)}</td>
+                <td>${celdaBono(f.bonos.Rch)}</td>
+                <td>${celdaBono(f.bonos.MG)}</td>
+                <td>${celdaBono(f.bonos.RLP)}</td>
+                <td style="font-weight:700; color: var(--win);">${f.tb}</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" style="text-align:right;">Sumatoria Total:</td>
+            <td>${totalPts}</td><td>-</td><td>-</td><td>-</td>
+            <td>${totales.E}</td><td>${totales.R}</td><td>${totales.M}</td><td>${totales.O}</td>
+            <td>${totales.S}</td><td>${totales.Rch}</td><td>${totales.MG}</td><td>${totales.RLP}</td>
+            <td style="color: var(--win);">${totalTB}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  `;
+}
+
+function descargarImagen() {
+  const el = document.getElementById("captura-clasificacion");
+  html2canvas(el, { backgroundColor: "#14161c", scale: 2 }).then(canvas => {
+    const enlace = document.createElement("a");
+    enlace.href = canvas.toDataURL("image/png");
+    enlace.download = "clasificacion.png";
+    enlace.click();
+  });
 }
 
 (async function init() {
   const datos = await cargarDatos();
-  TODAS_LAS_PARTIDAS = datos.partidas;
+  PARTIDAS = datos.partidas;
   EQUIVALENCIAS = datos.equivalencias;
-  poblarFiltroPeriodo();
+  poblarFiltros();
   renderizar();
 })();
 </script>

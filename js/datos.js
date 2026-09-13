@@ -224,3 +224,144 @@ function compararJugadores(nombres, partidas, equivalencias) {
     unidadesAsesinadas: 0, edificiosArrasados: 0, segundosTotales: 0, civs: {}
   });
 }
+
+/**
+ * Calcula, para una secuencia de partidas de un mismo periodo (ya ordenadas
+ * ASCENDENTE por claveOrden), cuanto vario la posicion de cada jugador en la
+ * tabla de posiciones jornada por jornada (agrupando las partidas de cada
+ * jornada como un solo "salto"). Devuelve: { [jornada]: { [nombre]: variacion } }
+ */
+function calcularVarPorJornada(partidasOrdenadasAsc, equivalencias) {
+  const grupos = [];
+  partidasOrdenadasAsc.forEach(p => {
+    let g = grupos.find(g => g.jornada === p.jornada);
+    if (!g) { g = { jornada: p.jornada, partidas: [] }; grupos.push(g); }
+    g.partidas.push(p);
+  });
+
+  const resultado = {};
+  let acumulado = [];
+
+  grupos.forEach(g => {
+    const rankingAntes = Object.values(calcularEstadisticasJugadores(acumulado, equivalencias))
+      .sort((a, b) => b.puntos - a.puntos);
+    const posAntesMap = {};
+    rankingAntes.forEach((j, i) => posAntesMap[j.nombre] = i + 1);
+    const totalAntes = rankingAntes.length;
+
+    acumulado = [...acumulado, ...g.partidas];
+
+    const rankingDespues = Object.values(calcularEstadisticasJugadores(acumulado, equivalencias))
+      .sort((a, b) => b.puntos - a.puntos);
+    const posDespuesMap = {};
+    rankingDespues.forEach((j, i) => posDespuesMap[j.nombre] = i + 1);
+
+    const vars = {};
+    Object.keys(posDespuesMap).forEach(nombre => {
+      const posAntes = posAntesMap[nombre] !== undefined ? posAntesMap[nombre] : totalAntes + 1;
+      vars[nombre] = posAntes - posDespuesMap[nombre];
+    });
+    resultado[g.jornada] = vars;
+  });
+
+  return resultado;
+}
+
+/**
+ * Igual que calcularVarPorJornada, pero el "salto" se calcula partida por
+ * partida en vez de jornada por jornada. Devuelve: { [idPartida]: { [nombre]: variacion } }
+ */
+function calcularVarPorPartida(partidasOrdenadasAsc, equivalencias) {
+  const resultado = {};
+  let acumulado = [];
+
+  partidasOrdenadasAsc.forEach(p => {
+    const rankingAntes = Object.values(calcularEstadisticasJugadores(acumulado, equivalencias))
+      .sort((a, b) => b.puntos - a.puntos);
+    const posAntesMap = {};
+    rankingAntes.forEach((j, i) => posAntesMap[j.nombre] = i + 1);
+    const totalAntes = rankingAntes.length;
+
+    acumulado = [...acumulado, p];
+
+    const rankingDespues = Object.values(calcularEstadisticasJugadores(acumulado, equivalencias))
+      .sort((a, b) => b.puntos - a.puntos);
+    const posDespuesMap = {};
+    rankingDespues.forEach((j, i) => posDespuesMap[j.nombre] = i + 1);
+
+    const vars = {};
+    (p.jugadores || []).forEach(j => {
+      const nombre = resolverNombreOficial(j.nombre, equivalencias);
+      const posDespues = posDespuesMap[nombre];
+      const posAntes = posAntesMap[nombre] !== undefined ? posAntesMap[nombre] : totalAntes + 1;
+      vars[nombre] = posAntes - posDespues;
+    });
+    resultado[p.id] = vars;
+  });
+
+  return resultado;
+}
+
+/**
+ * Arma la tabla de clasificacion detallada (columnas de bonos, ultimo suceso,
+ * V/D, TB, variacion) para un Año/Mes dado, opcionalmente acotado hasta una
+ * Jornada especifica (si jornadaFiltro es null/"" se usa el mes completo).
+ */
+function calcularTablaClasificacion(todasLasPartidas, equivalencias, anio, mes, jornadaFiltro) {
+  const delPeriodo = todasLasPartidas
+    .filter(p => p.anio == anio && String(p.mes).padStart(2, "0") === String(mes).padStart(2, "0"))
+    .sort((a, b) => claveOrden(a) - claveOrden(b));
+
+  const jornadasDisponibles = [...new Set(delPeriodo.map(p => p.jornada))]
+    .sort((a, b) => numeroDeJornada(a) - numeroDeJornada(b));
+
+  const jornadaLimite = jornadaFiltro || (jornadasDisponibles[jornadasDisponibles.length - 1] || null);
+
+  const enAlcance = jornadaLimite
+    ? delPeriodo.filter(p => numeroDeJornada(p.jornada) <= numeroDeJornada(jornadaLimite))
+    : delPeriodo;
+
+  const varPorJornada = calcularVarPorJornada(delPeriodo, equivalencias);
+  const varDeEstaJornada = jornadaLimite ? (varPorJornada[jornadaLimite] || {}) : {};
+
+  const ultimaPartidaEnAlcance = enAlcance.length > 0
+    ? enAlcance.reduce((a, b) => claveOrden(b) > claveOrden(a) ? b : a)
+    : null;
+
+  const stats = calcularEstadisticasJugadores(enAlcance, equivalencias);
+
+  const filas = Object.values(stats).map(j => {
+    const registroUltima = ultimaPartidaEnAlcance
+      ? (ultimaPartidaEnAlcance.jugadores || []).find(x => resolverNombreOficial(x.nombre, equivalencias) === j.nombre)
+      : null;
+
+    const bonos = { E: 0, R: 0, M: 0, O: 0, S: 0, Rch: 0, MG: 0, RLP: 0 };
+    enAlcance.forEach(p => {
+      const reg = (p.jugadores || []).find(x => resolverNombreOficial(x.nombre, equivalencias) === j.nombre);
+      if (reg) (reg.bonos || []).forEach(b => { if (bonos[b] !== undefined) bonos[b]++; });
+    });
+    const tb = Object.values(bonos).reduce((a, b) => a + b, 0);
+
+    return {
+      nombre: j.nombre,
+      puntos: j.puntos,
+      victorias: j.victorias,
+      derrotas: j.derrotas,
+      partidas: j.partidas,
+      ultimoSuceso: registroUltima
+        ? [registroUltima.resultado === "victoria" ? "Victoria" : "Derrota", ...(registroUltima.bonos || []).map(b => ETIQUETAS_BONO[b] || b)].join(" + ")
+        : "Sin participación",
+      vd: registroUltima ? (registroUltima.resultado === "victoria" ? 1 : 0) : 0,
+      bonos,
+      tb,
+      variacion: varDeEstaJornada[j.nombre] ?? 0
+    };
+  }).sort((a, b) => b.puntos - a.puntos);
+
+  return {
+    filas,
+    jornadasDisponibles,
+    jornadaMostrada: jornadaLimite,
+    totalPartidas: enAlcance.length
+  };
+}
