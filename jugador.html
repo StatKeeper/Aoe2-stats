@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil de jugador — Comunidad AoE II</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>⚔ Comunidad AoE II</h1>
+    <span class="sub">Perfil de jugador</span>
+  </div>
+  <nav class="tabs">
+    <a href="index.html">Clasificación</a>
+    <a href="jugador.html" class="active">Jugadores</a>
+    <a href="estadisticas.html">Estadísticas</a>
+    <a href="candidatos.html">Candidatos</a>
+    <a href="historial.html">Historial</a>
+    <a href="admin.html">Administración</a>
+  </nav>
+</header>
+
+<main>
+  <div class="panel" id="buscador">
+    <h3>Buscar jugador</h3>
+    <input type="text" id="input-buscar" list="lista-nombres" placeholder="Escribe un nombre...">
+    <datalist id="lista-nombres"></datalist>
+  </div>
+
+  <div id="contenido-perfil"></div>
+</main>
+
+<nav class="mobile-nav">
+  <a href="index.html"><span class="icon">🏆</span>Ranking</a>
+  <a href="jugador.html" class="active"><span class="icon">🧑‍🤝‍🧑</span>Jugadores</a>
+  <a href="estadisticas.html"><span class="icon">📈</span>Stats</a>
+  <a href="candidatos.html"><span class="icon">⭐</span>Candidatos</a>
+  <a href="historial.html"><span class="icon">📜</span>Historial</a>
+</nav>
+
+<script src="js/datos.js"></script>
+<script>
+let PARTIDAS = [];
+let EQUIVALENCIAS = [];
+
+function pintarPerfil(nombre) {
+  const cont = document.getElementById("contenido-perfil");
+  const stats = calcularEstadisticasJugadores(PARTIDAS, EQUIVALENCIAS)[nombre];
+
+  if (!stats) {
+    cont.innerHTML = `<div class="empty-state">No se encontraron partidas para "${nombre}".</div>`;
+    return;
+  }
+
+  const winRate = stats.partidas > 0 ? Math.round((stats.victorias / stats.partidas) * 100) : 0;
+  const promTiempo = stats.partidas > 0 ? Math.round(stats.segundosTotales / stats.partidas) : 0;
+  const inicial = stats.nombre.replace(/\[.*?\]/g, "").trim().charAt(0).toUpperCase() || "?";
+
+  const civsOrdenadas = Object.entries(stats.civs).sort((a, b) => b[1].jugadas - a[1].jugadas);
+  const maxJugadas = civsOrdenadas.length ? civsOrdenadas[0][1].jugadas : 1;
+
+  const historial = historialDeJugador(nombre, PARTIDAS, EQUIVALENCIAS).slice(0, 10);
+
+  cont.innerHTML = `
+    <div class="profile-header">
+      <div class="avatar">${inicial}</div>
+      <div>
+        <h1>${stats.nombre}</h1>
+        <div class="tagline">${stats.partidas} partidas jugadas · ${winRate}% victorias</div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-tile"><span class="num">${stats.puntos}</span><span class="label">Puntos</span></div>
+      <div class="stat-tile"><span class="num">${stats.victorias}</span><span class="label">Victorias</span></div>
+      <div class="stat-tile"><span class="num">${stats.derrotas}</span><span class="label">Derrotas</span></div>
+      <div class="stat-tile"><span class="num">${formatearDuracion(promTiempo)}</span><span class="label">Prom. duración</span></div>
+      <div class="stat-tile"><span class="num">${Math.round(stats.unidadesAsesinadas / stats.partidas) || 0}</span><span class="label">Prom. unid. bajas</span></div>
+      <div class="stat-tile"><span class="num">${Math.round(stats.edificiosArrasados / stats.partidas) || 0}</span><span class="label">Prom. edif. arrasados</span></div>
+    </div>
+
+    <div class="section-head"><h2>Civilizaciones más jugadas</h2></div>
+    <div class="breakdown-list">
+      ${civsOrdenadas.length === 0 ? `<div class="empty-state">Sin datos de civilización.</div>` : civsOrdenadas.map(([civ, d]) => {
+        const wr = Math.round((d.victorias / d.jugadas) * 100);
+        const ancho = Math.round((d.jugadas / maxJugadas) * 100);
+        return `
+          <div class="breakdown-row">
+            <span>${civ}</span>
+            <span>${d.jugadas}p</span>
+            <span class="wr">${wr}% WR</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${ancho}%"></div></div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+
+    <div class="section-head"><h2>Partidas recientes</h2></div>
+    <div class="panel">
+      ${historial.length === 0 ? `<div class="empty-state">Sin partidas registradas.</div>` : historial.map(({ partida, registro }) => `
+        <div class="match-item">
+          <span>
+            <span class="match-badge ${registro.resultado === 'victoria' ? 'win' : 'loss'}"></span>
+            ${registro.civ || "—"} ${registro.equipo ? `· ${registro.equipo}` : ""}
+          </span>
+          <span class="match-meta">${etiquetaPartida(partida)} · ${formatearDuracion(partida.duracionSeg)}</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function poblarBuscador() {
+  const stats = calcularEstadisticasJugadores(PARTIDAS, EQUIVALENCIAS);
+  const nombres = Object.keys(stats).sort();
+  document.getElementById("lista-nombres").innerHTML =
+    nombres.map(n => `<option value="${n}">`).join("");
+
+  const params = new URLSearchParams(window.location.search);
+  const nombreURL = params.get("nombre");
+  if (nombreURL && stats[nombreURL]) {
+    document.getElementById("input-buscar").value = nombreURL;
+    pintarPerfil(nombreURL);
+  } else if (nombres.length > 0) {
+    document.getElementById("input-buscar").value = nombres[0];
+    pintarPerfil(nombres[0]);
+  } else {
+    document.getElementById("contenido-perfil").innerHTML =
+      `<div class="empty-state">Todavía no hay jugadores registrados.</div>`;
+  }
+}
+
+document.getElementById("input-buscar").addEventListener("change", (e) => {
+  pintarPerfil(e.target.value.trim());
+});
+
+(async function init() {
+  const datos = await cargarDatos();
+  PARTIDAS = datos.partidas;
+  EQUIVALENCIAS = datos.equivalencias;
+  poblarBuscador();
+})();
+</script>
+</body>
+</html>
