@@ -3,19 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clasificacion — Comunidad AoE II</title>
+<title>Inicio — Comunidad AoE II</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="css/estilo.css">
+<style>
+  .bienvenida { text-align: center; padding: 10px 0 24px; }
+  .bienvenida h1 { font-size: 1.6rem; color: var(--text); margin-bottom: 6px; }
+  .bienvenida .lema { color: var(--text-dim); font-size: 0.95rem; }
+  .galardon-destacado { text-align: center; }
+  .galardon-destacado img {
+    max-width: 100%; max-height: 72vh; border-radius: 6px;
+    border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+  }
+  .galardon-destacado .etiqueta {
+    margin-top: 14px; font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.05rem;
+  }
+  .galardon-destacado .subetiqueta { color: var(--text-dim); font-size: 0.8rem; margin-top: 4px; }
+</style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="brand">
     <h1>⚔ Comunidad AoE II</h1>
-    <span class="sub">Clasificación</span>
+    <span class="sub">Inicio</span>
   </div>
   <nav class="tabs">
-    <a href="index.html" class="active">Clasificación</a>
+    <a href="index.html" class="active">Inicio</a>
+    <a href="clasificacion.html">Clasificación</a>
     <a href="jugador.html">Jugadores</a>
     <a href="estadisticas.html">Estadísticas</a>
     <a href="candidatos.html">Candidatos</a>
@@ -25,22 +40,19 @@
 </header>
 
 <main>
-  <div class="section-head">
-    <h2>Tabla de posiciones</h2>
-    <span class="meta" id="resumen-periodo"></span>
+  <div class="bienvenida">
+    <h1>[cLm] Ranking Maratón Michi DM</h1>
+    <div class="lema">Bienvenido al portal oficial del torneo.</div>
   </div>
 
-  <div class="filters">
-    <select id="filtro-periodo"></select>
-  </div>
-
-  <div id="contenedor-standings" class="standings">
+  <div id="contenedor-galardon" class="galardon-destacado">
     <div class="empty-state">Cargando…</div>
   </div>
 </main>
 
 <nav class="mobile-nav">
-  <a href="index.html" class="active"><span class="icon">🏆</span>Ranking</a>
+  <a href="index.html" class="active"><span class="icon">🏠</span>Inicio</a>
+  <a href="clasificacion.html"><span class="icon">🏆</span>Ranking</a>
   <a href="jugador.html"><span class="icon">🧑‍🤝‍🧑</span>Jugadores</a>
   <a href="estadisticas.html"><span class="icon">📈</span>Stats</a>
   <a href="candidatos.html"><span class="icon">⭐</span>Candidatos</a>
@@ -49,61 +61,25 @@
 
 <script src="js/datos.js"></script>
 <script>
-let TODAS_LAS_PARTIDAS = [];
-let EQUIVALENCIAS = [];
-
-function poblarFiltroPeriodo() {
-  const select = document.getElementById("filtro-periodo");
-  const claves = [...new Set(TODAS_LAS_PARTIDAS.map(clavePeriodo))].sort().reverse();
-  if (claves.length === 0) {
-    select.innerHTML = `<option value="">Sin partidas</option>`;
-    return;
-  }
-  select.innerHTML = claves.map(c => `<option value="${c}">${nombrePeriodo(c)}</option>`).join("");
-  select.addEventListener("change", renderizar);
-}
-
-function renderizar() {
-  const periodo = document.getElementById("filtro-periodo").value;
-  const partidasDelPeriodo = TODAS_LAS_PARTIDAS.filter(p => clavePeriodo(p) === periodo);
-
-  document.getElementById("resumen-periodo").textContent =
-    `${partidasDelPeriodo.length} partida${partidasDelPeriodo.length === 1 ? "" : "s"} registrada${partidasDelPeriodo.length === 1 ? "" : "s"}`;
-
-  const stats = calcularEstadisticasJugadores(partidasDelPeriodo, EQUIVALENCIAS);
-  const lista = Object.values(stats).sort((a, b) => b.puntos - a.puntos);
-
-  const cont = document.getElementById("contenedor-standings");
-
-  if (lista.length === 0) {
-    cont.innerHTML = `<div class="empty-state">No hay partidas registradas para este período todavía.</div>`;
-    return;
-  }
-
-  cont.innerHTML = lista.map((j, i) => {
-    const rankClass = i === 0 ? "rank-1" : i === 1 ? "rank-2" : i === 2 ? "rank-3" : "";
-    return `
-      <div class="standings-row ${rankClass}">
-        <div class="rank-num">${i + 1}</div>
-        <div class="player-cell">
-          <div class="name"><a href="jugador.html?nombre=${encodeURIComponent(j.nombre)}">${j.nombre}</a></div>
-          <div class="subline">${j.victorias}V - ${j.derrotas}D</div>
-        </div>
-        <div class="stat-cell">
-          <span class="vpj">${j.partidas} PJ</span>
-          <span class="pts">${j.puntos}</span>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
 (async function init() {
   const datos = await cargarDatos();
-  TODAS_LAS_PARTIDAS = datos.partidas;
-  EQUIVALENCIAS = datos.equivalencias;
-  poblarFiltroPeriodo();
-  renderizar();
+  const cont = document.getElementById("contenedor-galardon");
+
+  // Encuentra la partida más reciente (según Año/Mes/Jornada/Partida) que tenga imagenGalardon
+  const conGalardon = datos.partidas.filter(p => p.imagenGalardon);
+  if (conGalardon.length === 0) {
+    cont.innerHTML = `<div class="empty-state">Todavía no se ha publicado ningún galardón.</div>`;
+    return;
+  }
+
+  conGalardon.sort((a, b) => claveOrden(b) - claveOrden(a));
+  const ultima = conGalardon[0];
+
+  cont.innerHTML = `
+    <img src="${ultima.imagenGalardon}" alt="Galardón ${etiquetaPartida(ultima)}">
+    <div class="etiqueta">👑 Jugador de la Fecha: ${ultima.jugadorDestacado || "—"}</div>
+    <div class="subetiqueta">${etiquetaPartida(ultima)} · ${NOMBRES_MES[ultima.mes]} ${ultima.anio}</div>
+  `;
 })();
 </script>
 </body>
