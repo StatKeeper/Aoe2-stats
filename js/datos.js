@@ -45,15 +45,18 @@ const ETIQUETAS_BONO = {
   S: "Sociedad", Rch: "Racha", MG: "Matagigantes", RLP: "Relampago"
 };
 
+const BONOS_SIMPLES = ["E", "R", "M", "O", "S", "Rch"]; // suman 1 punto automatico cada uno
+const BONOS_METODOLOGIA_APARTE = ["MG", "RLP"]; // su puntaje se calcula fuera y se ingresa manualmente en "puntosBonoExtra"
+
 async function cargarDatos() {
   try {
     const resp = await fetch(`${RUTA_DATOS}?t=${Date.now()}`, { cache: "no-store" });
     if (!resp.ok) throw new Error("No se pudo leer data.json");
     const json = await resp.json();
-    return {
-      equivalencias: Array.isArray(json.equivalencias) ? json.equivalencias : [],
-      partidas: Array.isArray(json.partidas) ? json.partidas : []
-    };
+    const equivalencias = Array.isArray(json.equivalencias) ? json.equivalencias : [];
+    const partidasCrudas = Array.isArray(json.partidas) ? json.partidas : [];
+    const partidas = prepararPartidasConBonosAutomaticos(partidasCrudas, equivalencias);
+    return { equivalencias, partidas };
   } catch (e) {
     console.error("Error cargando datos:", e);
     return { equivalencias: [], partidas: [] };
@@ -139,7 +142,8 @@ function calcularEstadisticasJugadores(partidas, equivalencias) {
 
       ficha.partidas++;
       if (gano) ficha.victorias++; else ficha.derrotas++;
-      ficha.puntos += (j.puntos ?? (gano ? 3 : 0)) + (j.bonos ? j.bonos.length : 0);
+      const bonosSimplesGanados = (j.bonos || []).filter(b => BONOS_SIMPLES.includes(b)).length;
+      ficha.puntos += (j.puntos ?? (gano ? 3 : 0)) + bonosSimplesGanados + (j.puntosBonoExtra || 0);
       ficha.unidadesAsesinadas += j.unidadesAsesinadas || 0;
       ficha.edificiosArrasados += j.edificiosArrasados || 0;
       ficha.segundosTotales += partida.duracionSeg || 0;
@@ -248,6 +252,7 @@ function calcularVarPorJornada(partidasOrdenadasAsc, equivalencias) {
     const posAntesMap = {};
     rankingAntes.forEach((j, i) => posAntesMap[j.nombre] = i + 1);
     const totalAntes = rankingAntes.length;
+    const esPrimeraJornadaConDatos = totalAntes === 0;
 
     acumulado = [...acumulado, ...g.partidas];
 
@@ -258,8 +263,13 @@ function calcularVarPorJornada(partidasOrdenadasAsc, equivalencias) {
 
     const vars = {};
     Object.keys(posDespuesMap).forEach(nombre => {
-      const posAntes = posAntesMap[nombre] !== undefined ? posAntesMap[nombre] : totalAntes + 1;
-      vars[nombre] = posAntes - posDespuesMap[nombre];
+      if (esPrimeraJornadaConDatos) {
+        // Nadie tenía posición previa en la tabla: variación neutra para todos.
+        vars[nombre] = 0;
+      } else {
+        const posAntes = posAntesMap[nombre] !== undefined ? posAntesMap[nombre] : totalAntes + 1;
+        vars[nombre] = posAntes - posDespuesMap[nombre];
+      }
     });
     resultado[g.jornada] = vars;
   });
@@ -364,4 +374,91 @@ function calcularTablaClasificacion(todasLasPartidas, equivalencias, anio, mes, 
     jornadaMostrada: jornadaLimite,
     totalPartidas: enAlcance.length
   };
+}
+
+/**
+ * Calcula automaticamente los bonos Matagigantes (MG) y Relampago (RLP) para
+ * TODAS las partidas de un mismo Anio/Mes, procesandolas en orden cronologico
+ * y usando la posicion en la tabla justo ANTES de cada partida.
+ *
+ * Reglas:
+ * - RLP: partida con duracion < 60:00. Gana cualquier ganador. Puntos segun
+ *   SU posicion antes de la partida: 1-10 -> 1pt, 11-15 -> 2pt, 16+ -> 3pt.
+ * - MG: solo activo desde "Fecha 06" en adelante. "Gigante" = top 5 antes de
+ *   la partida. Se activa si algun perdedor era gigante. Lo reciben los
+ *   ganadores que NO son gigantes (posicion > 5), con los mismos tramos de
+ *   puntos que RLP pero arrancando en la posicion 6 (6-10 -> 1pt, 11-15 -> 2pt,
+ *   16+ -> 3pt). Los que ya estan en el top 5 nunca reciben MG.
+ *
+ * Devuelve un NUEVO arreglo de partidas (no muta el original) con cada
+ * jugador ya anotado con sus bonos MG/RLP agregados a `bonos` y su puntaje
+ * correspondiente sumado a `puntosBonoExtra`.
+ */
+function tramoDePuntos(posicion, limites) {
+  for (const [limite, pts] of limites) {
+    if (limite === null || posicion <= limite) return pts;
+  }
+  return 0;
+}
+
+function calcularBonosAutomaticosDelMes(partidasDelMesAsc, equivalencias) {
+  let acumulado = [];
+  const resultado = [];
+
+  partidasDelMesAsc.forEach(original => {
+    const rankingAntes = Object.values(calcularEstadisticasJugadores(acumulado, equivalencias))
+      .sort((a, b) => b.puntos - a.puntos);
+    const posAntesMap = {};
+    rankingAntes.forEach((j, i) => posAntesMap[j.nombre] = i + 1);
+    const totalAntes = rankingAntes.length;
+    const posicionDe = nombre => posAntesMap[nombre] !== undefined ? posAntesMap[nombre] : totalAntes + 1;
+
+    const jugadoresAnotados = (original.jugadores || []).map(j => ({ ...j, bonos: [...(j.bonos || [])] }));
+    const resueltos = jugadoresAnotados.map(j => ({ ref: j, nombreOficial: resolverNombreOficial(j.nombre, equivalencias) }));
+
+    const ganadores = resueltos.filter(r => r.ref.resultado === "victoria");
+    const perdedores = resueltos.filter(r => r.ref.resultado === "derrota");
+
+    const numJornada = numeroDeJornada(original.jornada);
+    const huboGiganteEntreLosPerdedores = perdedores.some(r => posicionDe(r.nombreOficial) <= 5);
+    const duracionValidaRelampago = original.duracionSeg > 0 && original.duracionSeg < 3600;
+
+    ganadores.forEach(r => {
+      const pos = posicionDe(r.nombreOficial);
+      let extra = 0;
+
+      if (duracionValidaRelampago) {
+        extra += tramoDePuntos(pos, [[10, 1], [15, 2], [null, 3]]);
+        r.ref.bonos.push("RLP");
+      }
+      if (numJornada >= 6 && huboGiganteEntreLosPerdedores && pos > 5) {
+        extra += tramoDePuntos(pos, [[10, 1], [15, 2], [null, 3]]);
+        r.ref.bonos.push("MG");
+      }
+      r.ref.puntosBonoExtra = (r.ref.puntosBonoExtra || 0) + extra;
+    });
+
+    const nuevaPartida = { ...original, jugadores: jugadoresAnotados };
+    resultado.push(nuevaPartida);
+    acumulado = [...acumulado, nuevaPartida];
+  });
+
+  return resultado;
+}
+
+/** Aplica el calculo automatico de MG/RLP mes por mes sobre TODAS las partidas cargadas. */
+function prepararPartidasConBonosAutomaticos(todasLasPartidas, equivalencias) {
+  const grupos = {};
+  todasLasPartidas.forEach(p => {
+    const clave = clavePeriodo(p);
+    if (!grupos[clave]) grupos[clave] = [];
+    grupos[clave].push(p);
+  });
+
+  let resultado = [];
+  Object.values(grupos).forEach(partidasDelMes => {
+    const ordenadas = [...partidasDelMes].sort((a, b) => claveOrden(a) - claveOrden(b));
+    resultado = resultado.concat(calcularBonosAutomaticosDelMes(ordenadas, equivalencias));
+  });
+  return resultado;
 }

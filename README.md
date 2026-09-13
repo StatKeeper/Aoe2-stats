@@ -83,3 +83,16 @@ alias puede tener un jugador.
 En `admin.html`, sección ③, verás la lista de partidas cargadas con un botón 🗑 para
 eliminar cualquiera antes de descargar y publicar el archivo final.
 
+
+## Sistema de puntos
+
+- **Victoria** = 3 puntos.
+- **E, R, M, O, S, Rch** (Excelencia, Resistencia, Militar, Oro, Sociedad, Racha) = 1 punto cada uno.
+  Estos los escribes tú mismo en el campo "Bonos" al registrar la partida.
+- **MG (Matagigantes)** y **RLP (Relámpago)** se calculan **automáticamente** por el sistema,
+  con base en la posición del jugador y la duración de la partida — no se ingresan a mano:
+  - **RLP**: se activa desde la primera partida del mes, en cualquier partida ganada en menos
+    de 60 minutos. Posición 1-10 → 1pt, 11-15 → 2pt, 16 en adelante → 3pt. Aplica a cualquiera.
+  - **MG**: solo se activa desde "Fecha 06" en adelante. Se otorga a un ganador que **no** esté
+    en el Top 5 si venció a algún rival que **sí** estaba en el Top 5 antes de esa partida.
+    Posición 6-10 → 1pt, 11-15 → 2pt, 16 en adelante → 3pt. Los jugadores del Top 5 nunca reciben MG.
