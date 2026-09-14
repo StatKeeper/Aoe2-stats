@@ -35,20 +35,22 @@
   <div class="panel">
     <h3>② Agregar nueva partida</h3>
     <p class="hint">
-      Cabecera obligatoria: <code>anio:</code>, <code>mes:</code> (01-12), <code>jornada:</code> (ej. "Fecha 01"),
-      <code>partida:</code> (número), <code>duracion:</code> (HH:MM:SS).<br>
-      Luego una línea por jugador: <code>Jugador | victoria|derrota | Civilización | Equipo | UnidadesAsesinadas | EdificiosArrasados | Bonos(coma)</code><br>
-      En "Bonos" solo escribe los que observas directamente (E, R, M, O, S, Rch). Los bonos
-      <strong>Matagigantes (MG)</strong> y <strong>Relámpago (RLP)</strong> los calcula el sistema
-      automáticamente según la posición y duración de la partida — no los escribas tú.
+      Cabecera flexible (con o sin ":"): <code>año 2026</code>, <code>mes 08</code>,
+      <code>jornada Fecha 1</code>, <code>partida 1 01:07:08</code> (número y duración juntos,
+      o por separado con <code>duracion: HH:MM:SS</code>).<br>
+      Luego una línea por jugador con tus columnas de siempre:<br>
+      <code>Jugador | Pts | E | R | M | O | S | Rch | MG | RLP | UnidAsesinadas | EdifArrasados | Equipo | Civilización</code><br>
+      <strong>Pts</strong>: 3 si ganó, 0 si perdió. Los bonos E/R/M/O/S/Rch van con 1 (sí) o 0 (no).
+      Las columnas <strong>MG y RLP se ignoran</strong> (se calculan solas) — puedes dejarlas en 0
+      como siempre, no afectan nada.
     </p>
-    <textarea id="input-reporte" placeholder="anio: 2026
-mes: 08
-jornada: Fecha 02
-partida: 1
-duracion: 01:07:00
-GJ Euphory | victoria | Mayas | Equipo 1 | 3700 | 119 | E,M
-Little duck | derrota | Turcos | Equipo 2 | 6502 | 28 |"></textarea>
+    <textarea id="input-reporte" placeholder="año 2026
+mes 08
+jornada Fecha 1
+partida 1 01:07:08
+[cLm] KFICHO | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4242 | 73 | Equipo 1 | Gurjaras
+GJ Euphory | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 3700 | 119 | Equipo 1 | Mayas
+Little duck | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 6502 | 28 | Equipo 2 | Turcos"></textarea>
     <div style="margin-top:10px;">
       <button class="btn" onclick="procesarReporte()">➕ Agregar esta partida</button>
     </div>
@@ -155,40 +157,69 @@ function procesarReporte() {
   let duracionSeg = 0;
   const jugadores = [];
 
+  // Quita "palabra:" o "palabra " del inicio de una línea de encabezado y devuelve el resto
+  function valorDespuesDe(linea, palabras) {
+    for (const palabra of palabras) {
+      const regex = new RegExp(`^${palabra}\\s*:?\\s*`, "i");
+      if (regex.test(linea)) return linea.replace(regex, "").trim();
+    }
+    return null;
+  }
+
   lineas.forEach(linea => {
-    const inferior = linea.toLowerCase();
-    if (inferior.startsWith("anio:") || inferior.startsWith("año:")) {
-      anio = parseInt(linea.split(":").slice(1).join(":").trim(), 10) || anio;
+    let valor;
+
+    if ((valor = valorDespuesDe(linea, ["anio", "año"])) !== null) {
+      anio = parseInt(valor, 10) || anio;
       return;
     }
-    if (inferior.startsWith("mes:")) {
-      mes = linea.split(":").slice(1).join(":").trim().padStart(2, "0");
+    if ((valor = valorDespuesDe(linea, ["mes"])) !== null) {
+      mes = valor.padStart(2, "0");
       return;
     }
-    if (inferior.startsWith("jornada:")) {
-      jornada = linea.split(":").slice(1).join(":").trim();
+    if ((valor = valorDespuesDe(linea, ["jornada"])) !== null) {
+      // Normaliza cualquier variante ("Fecha 1", "fecha01", "Fecha 01") a "Fecha 01"
+      const numJor = numeroDeJornada(valor);
+      jornada = numJor > 0 ? `Fecha ${String(numJor).padStart(2, "0")}` : valor;
       return;
     }
-    if (inferior.startsWith("partida:")) {
-      numeroPartida = parseInt(linea.split(":").slice(1).join(":").trim(), 10) || numeroPartida;
+    if ((valor = valorDespuesDe(linea, ["partida"])) !== null) {
+      // Acepta "partida: 1" o "partida 1 01:07:08" (número + duración juntos)
+      const match = valor.match(/^(\d+)\s*(?:(\d{1,2}:\d{2}(?::\d{2})?))?/);
+      if (match) {
+        numeroPartida = parseInt(match[1], 10) || numeroPartida;
+        if (match[2]) duracionSeg = convertirDuracionASegundos(match[2]);
+      }
       return;
     }
-    if (inferior.startsWith("duracion:") || inferior.startsWith("duración:")) {
-      duracionSeg = convertirDuracionASegundos(linea.split(":").slice(1).join(":").trim());
+    if ((valor = valorDespuesDe(linea, ["duracion", "duración"])) !== null) {
+      duracionSeg = convertirDuracionASegundos(valor);
       return;
     }
+
     const partes = linea.split("|").map(p => p.trim());
     if (partes.length < 2) return;
 
-    const [nombre, resultadoRaw, civ, equipo, uAsesRaw, eArrRaw, bonosRaw] = partes;
+    // Formato: Jugador | Pts(3 o 0) | E | R | M | O | S | Rch | MG | RLP | UAses | EArr | Equipo | Civ
+    // Las columnas MG y RLP se IGNORAN a propósito: el sistema las calcula automáticamente.
+    const [nombre, ptsRaw, eRaw, rRaw, mRaw, oRaw, sRaw, rchRaw, , , uAsesRaw, eArrRaw, equipo, civ] = partes;
+
+    const bonos = [];
+    if (parseInt(eRaw, 10) > 0) bonos.push("E");
+    if (parseInt(rRaw, 10) > 0) bonos.push("R");
+    if (parseInt(mRaw, 10) > 0) bonos.push("M");
+    if (parseInt(oRaw, 10) > 0) bonos.push("O");
+    if (parseInt(sRaw, 10) > 0) bonos.push("S");
+    if (parseInt(rchRaw, 10) > 0) bonos.push("Rch");
+
     jugadores.push({
       nombre,
-      resultado: (resultadoRaw || "").toLowerCase().startsWith("v") ? "victoria" : "derrota",
+      resultado: (parseInt(ptsRaw, 10) || 0) > 0 ? "victoria" : "derrota",
       civ: civ || "",
       equipo: equipo || "",
       unidadesAsesinadas: parseInt(uAsesRaw, 10) || 0,
       edificiosArrasados: parseInt(eArrRaw, 10) || 0,
-      bonos: bonosRaw ? bonosRaw.split(",").map(b => b.trim()).filter(Boolean) : []
+      bonos
     });
   });
 

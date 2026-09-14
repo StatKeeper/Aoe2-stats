@@ -143,10 +143,10 @@ function renderizar() {
     return;
   }
 
-  const { filas, jornadaMostrada, totalPartidas } = calcularTablaClasificacion(PARTIDAS, EQUIVALENCIAS, anio, mes, jornada || null);
+  const { filas, jornadaMostrada, ultimaPartida } = calcularTablaClasificacion(PARTIDAS, EQUIVALENCIAS, anio, mes, jornada || null);
 
-  document.getElementById("titulo-jornada").textContent = jornadaMostrada ? `Hasta ${jornadaMostrada}` : "Tabla de posiciones";
-  document.getElementById("resumen-periodo").textContent = `${totalPartidas} partida(s) consideradas`;
+  document.getElementById("titulo-jornada").textContent = ultimaPartida ? etiquetaPartida(ultimaPartida) : "Tabla de posiciones";
+  document.getElementById("resumen-periodo").textContent = "";
 
   const cont = document.getElementById("contenedor-standings");
   if (filas.length === 0) {

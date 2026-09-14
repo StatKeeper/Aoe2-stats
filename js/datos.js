@@ -375,6 +375,7 @@ function calcularTablaClasificacion(todasLasPartidas, equivalencias, anio, mes, 
     filas,
     jornadasDisponibles,
     jornadaMostrada: jornadaLimite,
+    ultimaPartida: ultimaPartidaEnAlcance,
     totalPartidas: enAlcance.length
   };
 }
