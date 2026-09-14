@@ -16,6 +16,7 @@
   .tabla-detallada tfoot td { background: var(--panel-raised); font-weight: 700; }
   .var-up { color: var(--win); }
   .var-down { color: var(--loss); }
+  .suceso-sin-participacion { color: #a15c58; }
   .bono-cell.activo { color: var(--loss); font-weight: 700; }
   .bono-cell.inactivo { color: var(--text-dim); }
   .toolbar-clasif { display:flex; justify-content: space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom: 10px; }
@@ -25,7 +26,6 @@
 
 <header class="topbar">
   <div class="brand">
-    <h1>⚔ Ranking Maratón Comunidad Michi DM</h1>
     <span class="sub">Clasificación</span>
   </div>
   <nav class="tabs">
@@ -182,7 +182,7 @@ function renderizar() {
                 <td class="jugador"><a href="jugador.html?nombre=${encodeURIComponent(f.nombre)}">${f.nombre}</a></td>
                 <td>${f.puntos}</td>
                 <td>${f.victorias}/${f.partidas}</td>
-                <td style="text-align:left; font-style:italic; color: var(--text-dim);">${f.ultimoSuceso}</td>
+                <td style="text-align:left; font-style:italic;" class="${f.ultimoSuceso === 'Sin participación' ? 'suceso-sin-participacion' : ''}">${f.ultimoSuceso}</td>
                 <td>${f.vd}</td>
                 <td>${celdaBono(f.bonos.E)}</td>
                 <td>${celdaBono(f.bonos.R)}</td>
