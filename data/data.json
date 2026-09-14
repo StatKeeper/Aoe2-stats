@@ -1,5 +1,10 @@
 {
-  "equivalencias": [],
+  "equivalencias": [
+    {
+      "antiguo": "Gerard",
+      "oficial": "[cLm] Gerard"
+    }
+  ],
   "partidas": [
     {
       "id": "2026-08-Fecha01-P1",
