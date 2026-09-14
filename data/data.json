@@ -25,7 +25,80 @@
       "oficial": "Little duck"
     }
   ],
-  "partidas": [],
+  "partidas": [
+    {
+      "id": "2026-08-Fecha01-P1",
+      "anio": 2026,
+      "mes": "08",
+      "jornada": "Fecha 01",
+      "numeroPartida": 1,
+      "duracionSeg": 4028,
+      "jugadores": [
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "victoria",
+          "civ": "Gurjaras",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 4242,
+          "edificiosArrasados": 73,
+          "bonos": []
+        },
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "victoria",
+          "civ": "Mayas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 3700,
+          "edificiosArrasados": 119,
+          "bonos": [
+            "E",
+            "O"
+          ]
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Turcos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 4041,
+          "edificiosArrasados": 78,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Gurjaras",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1420,
+          "edificiosArrasados": 42,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "P@K()",
+          "resultado": "derrota",
+          "civ": "Mayas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3229,
+          "edificiosArrasados": 19,
+          "bonos": []
+        },
+        {
+          "nombre": "Little duck",
+          "resultado": "derrota",
+          "civ": "Turcos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 6502,
+          "edificiosArrasados": 28,
+          "bonos": [
+            "R",
+            "M"
+          ]
+        }
+      ]
+    }
+  ],
   "paises": {
     "[cLm] KFICHO": "PE",
     "GJ Euphory": "PE",
