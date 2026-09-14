@@ -77,7 +77,22 @@ Little duck | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 6502 | 28 | Equipo 2 | Turcos"
   </div>
 
   <div class="panel">
-    <h3>⑤ Imágenes de Candidatos (por partida)</h3>
+    <h3>⑤ Nacionalidad de jugadores (bandera en su perfil)</h3>
+    <p class="hint">
+      Escribe el nombre oficial exacto del jugador y su código de país de 2 letras
+      (ej. Perú = PE, Argentina = AR, México = MX, España = ES, Colombia = CO, Chile = CL).
+      Esto solo agrega una bandera junto a su perfil, no afecta estadísticas.
+    </p>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+      <input type="text" id="input-pais-jugador" placeholder="Nombre oficial (ej. GJ Euphory)" style="flex:2; min-width:180px;">
+      <input type="text" id="input-pais-codigo" maxlength="2" placeholder="PE" style="flex:0 0 70px; text-transform:uppercase;">
+      <button class="btn secondary" onclick="agregarPais()">Guardar</button>
+    </div>
+    <div id="lista-paises"></div>
+  </div>
+
+  <div class="panel">
+    <h3>⑥ Imágenes de Candidatos (por partida)</h3>
     <p class="hint">
       Cada partida puede tener 2 imágenes: la <strong>evaluación</strong> de candidatos que
       aspiraban al galardón, y el <strong>galardón</strong> de quien lo ganó. Primero sube
@@ -95,7 +110,7 @@ Little duck | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 6502 | 28 | Equipo 2 | Turcos"
   </div>
 
   <div class="panel">
-    <h3>⑥ Descargar y publicar</h3>
+    <h3>⑦ Descargar y publicar</h3>
     <p class="hint">
       Descarga el archivo, y súbelo a GitHub (Add file → Upload files) reemplazando
       <code>data/data.json</code> en la raíz del repositorio.
@@ -107,7 +122,7 @@ Little duck | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 6502 | 28 | Equipo 2 | Turcos"
 
 <script src="js/datos.js"></script>
 <script>
-let DATOS = { equivalencias: [], partidas: [] };
+let DATOS = { equivalencias: [], partidas: [], paises: {} };
 
 function actualizarContador() {
   document.getElementById("contador-partidas").textContent =
@@ -123,6 +138,7 @@ async function cargarDesdeServidor() {
     DATOS = await resp.json();
     if (!Array.isArray(DATOS.partidas)) DATOS.partidas = [];
     if (!Array.isArray(DATOS.equivalencias)) DATOS.equivalencias = [];
+    if (!DATOS.paises || typeof DATOS.paises !== "object") DATOS.paises = {};
     estado.textContent = `✔ Cargado: ${DATOS.partidas.length} partidas existentes.`;
   } catch (e) {
     estado.textContent = "⚠ No se encontró data.json publicado todavía (se empezará desde cero).";
@@ -130,6 +146,7 @@ async function cargarDesdeServidor() {
   actualizarContador();
   renderizarListaPartidas();
   renderizarEquivalencias();
+  renderizarPaises();
   poblarSelectorPartidas();
 }
 
@@ -313,6 +330,40 @@ function agregarEquivalencia() {
 function eliminarEquivalencia(i) {
   DATOS.equivalencias.splice(i, 1);
   renderizarEquivalencias();
+}
+
+function renderizarPaises() {
+  const cont = document.getElementById("lista-paises");
+  const nombres = Object.keys(DATOS.paises || {});
+  if (nombres.length === 0) {
+    cont.innerHTML = `<p class="hint">Todavía no hay banderas asignadas.</p>`;
+    return;
+  }
+  cont.innerHTML = nombres.map(nombre => `
+    <div class="match-item">
+      <span>${banderaEmoji(DATOS.paises[nombre])} ${nombre} <span style="color:var(--text-dim);">(${DATOS.paises[nombre]})</span></span>
+      <button class="btn secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="eliminarPais('${nombre.replace(/'/g,"\\'")}')">🗑</button>
+    </div>
+  `).join("");
+}
+
+function agregarPais() {
+  const nombre = document.getElementById("input-pais-jugador").value.trim();
+  const codigo = document.getElementById("input-pais-codigo").value.trim().toUpperCase();
+  if (!nombre || codigo.length !== 2) {
+    alert("Escribe el nombre oficial y un código de país de exactamente 2 letras.");
+    return;
+  }
+  if (!DATOS.paises) DATOS.paises = {};
+  DATOS.paises[nombre] = codigo;
+  document.getElementById("input-pais-jugador").value = "";
+  document.getElementById("input-pais-codigo").value = "";
+  renderizarPaises();
+}
+
+function eliminarPais(nombre) {
+  delete DATOS.paises[nombre];
+  renderizarPaises();
 }
 
 function poblarSelectorPartidas() {

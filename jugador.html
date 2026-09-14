@@ -47,6 +47,7 @@
 <script>
 let PARTIDAS = [];
 let EQUIVALENCIAS = [];
+let PAISES = {};
 
 function pintarPerfil(nombre) {
   const cont = document.getElementById("contenido-perfil");
@@ -60,6 +61,8 @@ function pintarPerfil(nombre) {
   const winRate = stats.partidas > 0 ? Math.round((stats.victorias / stats.partidas) * 100) : 0;
   const promTiempo = stats.partidas > 0 ? Math.round(stats.segundosTotales / stats.partidas) : 0;
   const inicial = stats.nombre.replace(/\[.*?\]/g, "").trim().charAt(0).toUpperCase() || "?";
+  const codigoPais = PAISES[stats.nombre];
+  const contenidoAvatar = codigoPais ? banderaEmoji(codigoPais) : inicial;
 
   const civsOrdenadas = Object.entries(stats.civs).sort((a, b) => b[1].jugadas - a[1].jugadas);
   const maxJugadas = civsOrdenadas.length ? civsOrdenadas[0][1].jugadas : 1;
@@ -68,7 +71,7 @@ function pintarPerfil(nombre) {
 
   cont.innerHTML = `
     <div class="profile-header">
-      <div class="avatar">${inicial}</div>
+      <div class="avatar" style="${codigoPais ? 'font-size:1.7rem; background:var(--panel-raised);' : ''}">${contenidoAvatar}</div>
       <div>
         <h1>${stats.nombre}</h1>
         <div class="tagline">${stats.partidas} partidas jugadas · ${winRate}% victorias</div>
@@ -143,6 +146,7 @@ document.getElementById("input-buscar").addEventListener("change", (e) => {
   const datos = await cargarDatos();
   PARTIDAS = datos.partidas;
   EQUIVALENCIAS = datos.equivalencias;
+  PAISES = datos.paises || {};
   poblarBuscador();
 })();
 </script>

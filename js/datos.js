@@ -56,10 +56,11 @@ async function cargarDatos() {
     const equivalencias = Array.isArray(json.equivalencias) ? json.equivalencias : [];
     const partidasCrudas = Array.isArray(json.partidas) ? json.partidas : [];
     const partidas = prepararPartidasConBonosAutomaticos(partidasCrudas, equivalencias);
-    return { equivalencias, partidas };
+    const paises = (json.paises && typeof json.paises === "object") ? json.paises : {};
+    return { equivalencias, partidas, paises };
   } catch (e) {
     console.error("Error cargando datos:", e);
-    return { equivalencias: [], partidas: [] };
+    return { equivalencias: [], partidas: [], paises: {} };
   }
 }
 
@@ -291,6 +292,7 @@ function calcularVarPorPartida(partidasOrdenadasAsc, equivalencias) {
     const posAntesMap = {};
     rankingAntes.forEach((j, i) => posAntesMap[j.nombre] = i + 1);
     const totalAntes = rankingAntes.length;
+    const esPrimeraPartidaConDatos = totalAntes === 0;
 
     acumulado = [...acumulado, p];
 
@@ -302,9 +304,13 @@ function calcularVarPorPartida(partidasOrdenadasAsc, equivalencias) {
     const vars = {};
     (p.jugadores || []).forEach(j => {
       const nombre = resolverNombreOficial(j.nombre, equivalencias);
-      const posDespues = posDespuesMap[nombre];
-      const posAntes = posAntesMap[nombre] !== undefined ? posAntesMap[nombre] : totalAntes + 1;
-      vars[nombre] = posAntes - posDespues;
+      if (esPrimeraPartidaConDatos) {
+        vars[nombre] = 0;
+      } else {
+        const posDespues = posDespuesMap[nombre];
+        const posAntes = posAntesMap[nombre] !== undefined ? posAntesMap[nombre] : totalAntes + 1;
+        vars[nombre] = posAntes - posDespues;
+      }
     });
     resultado[p.id] = vars;
   });
@@ -467,4 +473,11 @@ function prepararPartidasConBonosAutomaticos(todasLasPartidas, equivalencias) {
     resultado = resultado.concat(calcularBonosAutomaticosDelMes(ordenadas, equivalencias));
   });
   return resultado;
+}
+
+/** Convierte un código de país de 2 letras (ISO 3166-1 alpha-2, ej. "PE", "AR") en su emoji de bandera. */
+function banderaEmoji(codigoPais) {
+  if (!codigoPais || codigoPais.length !== 2) return "";
+  const base = 127397; // offset para regional indicator symbols
+  return String.fromCodePoint(...codigoPais.toUpperCase().split("").map(c => c.charCodeAt(0) + base));
 }
