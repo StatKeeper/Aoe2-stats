@@ -1,4 +1,36 @@
 {
-  "equivalencias": [],
-  "partidas": []
+  "equivalencias": [
+    {
+      "antiguo": "KFICHO",
+      "oficial": "[cLm] KFICHO"
+    },
+    {
+      "antiguo": "Euphory",
+      "oficial": "GJ Euphory"
+    },
+    {
+      "antiguo": "Papita Huayro",
+      "oficial": "Papita Huayro"
+    },
+    {
+      "antiguo": "GGINDU",
+      "oficial": "GGINDU"
+    },
+    {
+      "antiguo": "Pako",
+      "oficial": "P@K()"
+    },
+    {
+      "antiguo": "Little duck",
+      "oficial": "Little duck"
+    }
+  ],
+  "partidas": [],
+  "paises": {
+    "[cLm] KFICHO": "PE",
+    "GJ Euphory": "PE",
+    "Papita Huayro": "PE",
+    "GGINDU": "AR",
+    "P@K()": "MX"
+  }
 }
