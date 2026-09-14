@@ -1,0 +1,106 @@
+{
+  "equivalencias": [
+    {
+      "antiguo": "KFICHO",
+      "oficial": "[cLm] KFICHO"
+    },
+    {
+      "antiguo": "Euphory",
+      "oficial": "GJ Euphory"
+    },
+    {
+      "antiguo": "Papita Huayro",
+      "oficial": "Papita Huayro"
+    },
+    {
+      "antiguo": "GGINDU",
+      "oficial": "GGINDU"
+    },
+    {
+      "antiguo": "Pako",
+      "oficial": "P@K()"
+    },
+    {
+      "antiguo": "Little duck",
+      "oficial": "Little duck"
+    }
+  ],
+  "partidas": [
+    {
+      "id": "2026-08-Fecha01-P1",
+      "anio": 2026,
+      "mes": "08",
+      "jornada": "Fecha 01",
+      "numeroPartida": 1,
+      "duracionSeg": 0,
+      "jugadores": [
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "derrota",
+          "civ": "0",
+          "equipo": "0",
+          "unidadesAsesinadas": 0,
+          "edificiosArrasados": 0,
+          "bonos": [
+            "0"
+          ]
+        },
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "derrota",
+          "civ": "1",
+          "equipo": "0",
+          "unidadesAsesinadas": 0,
+          "edificiosArrasados": 1,
+          "bonos": [
+            "0"
+          ]
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "derrota",
+          "civ": "0",
+          "equipo": "0",
+          "unidadesAsesinadas": 0,
+          "edificiosArrasados": 0,
+          "bonos": [
+            "0"
+          ]
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "0",
+          "equipo": "0",
+          "unidadesAsesinadas": 0,
+          "edificiosArrasados": 0,
+          "bonos": [
+            "1"
+          ]
+        },
+        {
+          "nombre": "P@K()",
+          "resultado": "derrota",
+          "civ": "0",
+          "equipo": "0",
+          "unidadesAsesinadas": 0,
+          "edificiosArrasados": 0,
+          "bonos": [
+            "0"
+          ]
+        },
+        {
+          "nombre": "Little duck",
+          "resultado": "derrota",
+          "civ": "0",
+          "equipo": "1",
+          "unidadesAsesinadas": 1,
+          "edificiosArrasados": 0,
+          "bonos": [
+            "0"
+          ]
+        }
+      ]
+    }
+  ]
+}
