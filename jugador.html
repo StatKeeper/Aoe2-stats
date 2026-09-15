@@ -6,6 +6,7 @@
 <title>Perfil de jugador — Comunidad AoE II</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="css/estilo.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -32,6 +33,7 @@
   </div>
 
   <div id="contenido-perfil"></div>
+  <button id="btn-descargar-perfil" class="btn secondary" style="display:none; margin-top:12px;" onclick="descargarImagenPerfil()">📷 Descargar Imagen</button>
 </main>
 
 <nav class="mobile-nav">
@@ -55,6 +57,7 @@ function pintarPerfil(nombre) {
 
   if (!stats) {
     cont.innerHTML = `<div class="empty-state">No se encontraron partidas para "${nombre}".</div>`;
+    document.getElementById("btn-descargar-perfil").style.display = "none";
     return;
   }
 
@@ -84,9 +87,12 @@ function pintarPerfil(nombre) {
       <div class="stat-tile"><span class="num">${stats.puntos}</span><span class="label">Puntos</span></div>
       <div class="stat-tile"><span class="num">${stats.victorias}</span><span class="label">Victorias</span></div>
       <div class="stat-tile"><span class="num">${stats.derrotas}</span><span class="label">Derrotas</span></div>
-      <div class="stat-tile"><span class="num">${formatearDuracion(promTiempo)}</span><span class="label">Prom. duración</span></div>
-      <div class="stat-tile"><span class="num">${Math.round(stats.unidadesAsesinadas / stats.partidas) || 0}</span><span class="label">Prom. unid. bajas</span></div>
-      <div class="stat-tile"><span class="num">${Math.round(stats.edificiosArrasados / stats.partidas) || 0}</span><span class="label">Prom. edif. arrasados</span></div>
+      <div class="stat-tile"><span class="num">${formatearDuracion(stats.segundosTotales)}</span><span class="label">Tiempo Total</span></div>
+      <div class="stat-tile"><span class="num">${formatearDuracion(promTiempo)}</span><span class="label">Promedio Tiempo Total</span></div>
+      <div class="stat-tile"><span class="num">${stats.unidadesAsesinadas}</span><span class="label">Unidades Asesinadas</span></div>
+      <div class="stat-tile"><span class="num">${Math.round(stats.unidadesAsesinadas / stats.partidas) || 0}</span><span class="label">Promedio Unidades Asesinadas</span></div>
+      <div class="stat-tile"><span class="num">${stats.edificiosArrasados}</span><span class="label">Edificios Arrasados</span></div>
+      <div class="stat-tile"><span class="num">${Math.round(stats.edificiosArrasados / stats.partidas) || 0}</span><span class="label">Promedio Edificios Arrasados</span></div>
     </div>
 
     <div class="section-head"><h2>Civilizaciones más jugadas</h2></div>
@@ -118,6 +124,7 @@ function pintarPerfil(nombre) {
       `).join("")}
     </div>
   `;
+  document.getElementById("btn-descargar-perfil").style.display = "inline-block";
 }
 
 function poblarBuscador() {
@@ -134,12 +141,23 @@ function poblarBuscador() {
   } else {
     document.getElementById("contenido-perfil").innerHTML =
       `<div class="empty-state">Escribe o selecciona un jugador para ver su perfil.</div>`;
+    document.getElementById("btn-descargar-perfil").style.display = "none";
   }
 }
 
 document.getElementById("input-buscar").addEventListener("change", (e) => {
   pintarPerfil(e.target.value.trim());
 });
+
+function descargarImagenPerfil() {
+  const el = document.getElementById("contenido-perfil");
+  html2canvas(el, { backgroundColor: "#14161c", scale: 2 }).then(canvas => {
+    const enlace = document.createElement("a");
+    enlace.href = canvas.toDataURL("image/png");
+    enlace.download = "perfil-jugador.png";
+    enlace.click();
+  });
+}
 
 (async function init() {
   const datos = await cargarDatos();
