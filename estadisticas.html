@@ -6,6 +6,7 @@
 <title>Estadísticas — Comunidad AoE II</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="css/estilo.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   .subtabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
   .subtab-btn {
@@ -57,6 +58,7 @@
   </div>
 
   <div id="resultado" class="panel" style="display:none;"></div>
+  <button id="btn-descargar-stats" class="btn secondary" style="display:none; margin-top:10px;" onclick="descargarImagenStats()">📷 Descargar Imagen</button>
 </main>
 
 <nav class="mobile-nav">
@@ -77,6 +79,7 @@ function cambiarSubtab(tab) {
   subtabActual = tab;
   document.querySelectorAll(".subtab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
   document.getElementById("resultado").style.display = "none";
+  document.getElementById("btn-descargar-stats").style.display = "none";
 }
 
 function nombresSeleccionados() {
@@ -91,6 +94,7 @@ function consultar() {
 
   const resultadoDiv = document.getElementById("resultado");
   resultadoDiv.style.display = "block";
+  document.getElementById("btn-descargar-stats").style.display = "inline-block";
 
   if (subtabActual === "tiempos") {
     const datos = compararJugadores(nombres, PARTIDAS, EQUIVALENCIAS);
@@ -102,11 +106,11 @@ function consultar() {
           <tbody>
             <tr><td>Partidas</td>${datos.map(d => `<td>${d.partidas}</td>`).join("")}</tr>
             <tr><td>Tiempo total</td>${datos.map(d => `<td>${formatearDuracion(d.segundosTotales)}</td>`).join("")}</tr>
-            <tr><td>Prom. duración</td>${datos.map(d => `<td>${formatearDuracion(d.partidas ? Math.round(d.segundosTotales / d.partidas) : 0)}</td>`).join("")}</tr>
+            <tr><td>Promedio Tiempo Total</td>${datos.map(d => `<td>${formatearDuracion(d.partidas ? Math.round(d.segundosTotales / d.partidas) : 0)}</td>`).join("")}</tr>
             <tr><td>Unid. asesinadas</td>${datos.map(d => `<td>${d.unidadesAsesinadas}</td>`).join("")}</tr>
-            <tr><td>Prom. unidades</td>${datos.map(d => `<td>${d.partidas ? (d.unidadesAsesinadas / d.partidas).toFixed(1) : 0}</td>`).join("")}</tr>
+            <tr><td>Promedio Unidades Asesinadas</td>${datos.map(d => `<td>${d.partidas ? (d.unidadesAsesinadas / d.partidas).toFixed(1) : 0}</td>`).join("")}</tr>
             <tr><td>Edif. arrasados</td>${datos.map(d => `<td>${d.edificiosArrasados}</td>`).join("")}</tr>
-            <tr><td>Prom. edificios</td>${datos.map(d => `<td>${d.partidas ? (d.edificiosArrasados / d.partidas).toFixed(1) : 0}</td>`).join("")}</tr>
+            <tr><td>Promedio Edificios Arrasados</td>${datos.map(d => `<td>${d.partidas ? (d.edificiosArrasados / d.partidas).toFixed(1) : 0}</td>`).join("")}</tr>
           </tbody>
         </table>
       </div>
@@ -163,6 +167,16 @@ function consultar() {
       </div>
     `;
   }
+}
+
+function descargarImagenStats() {
+  const el = document.getElementById("resultado");
+  html2canvas(el, { backgroundColor: "#1c2027", scale: 2 }).then(canvas => {
+    const enlace = document.createElement("a");
+    enlace.href = canvas.toDataURL("image/png");
+    enlace.download = `estadisticas-${subtabActual}.png`;
+    enlace.click();
+  });
 }
 
 (async function init() {

@@ -62,7 +62,9 @@ function pintarPerfil(nombre) {
   const promTiempo = stats.partidas > 0 ? Math.round(stats.segundosTotales / stats.partidas) : 0;
   const inicial = stats.nombre.replace(/\[.*?\]/g, "").trim().charAt(0).toUpperCase() || "?";
   const codigoPais = PAISES[stats.nombre];
-  const contenidoAvatar = codigoPais ? banderaEmoji(codigoPais) : inicial;
+  const contenidoAvatar = codigoPais
+    ? `<img src="https://flagcdn.com/w160/${codigoPais.toLowerCase()}.png" alt="${codigoPais}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`
+    : inicial;
 
   const civsOrdenadas = Object.entries(stats.civs).sort((a, b) => b[1].jugadas - a[1].jugadas);
   const maxJugadas = civsOrdenadas.length ? civsOrdenadas[0][1].jugadas : 1;
@@ -71,7 +73,7 @@ function pintarPerfil(nombre) {
 
   cont.innerHTML = `
     <div class="profile-header">
-      <div class="avatar" style="${codigoPais ? 'font-size:1.7rem; background:var(--panel-raised);' : ''}">${contenidoAvatar}</div>
+      <div class="avatar" style="${codigoPais ? 'overflow:hidden; padding:0;' : ''}">${contenidoAvatar}</div>
       <div>
         <h1>${stats.nombre}</h1>
         <div class="tagline">${stats.partidas} partidas jugadas · ${winRate}% victorias</div>
@@ -129,12 +131,9 @@ function poblarBuscador() {
   if (nombreURL && stats[nombreURL]) {
     document.getElementById("input-buscar").value = nombreURL;
     pintarPerfil(nombreURL);
-  } else if (nombres.length > 0) {
-    document.getElementById("input-buscar").value = nombres[0];
-    pintarPerfil(nombres[0]);
   } else {
     document.getElementById("contenido-perfil").innerHTML =
-      `<div class="empty-state">Todavía no hay jugadores registrados.</div>`;
+      `<div class="empty-state">Escribe o selecciona un jugador para ver su perfil.</div>`;
   }
 }
 
