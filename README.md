@@ -87,10 +87,12 @@ eliminar cualquiera antes de descargar y publicar el archivo final.
 ## Sistema de puntos
 
 - **Victoria** = 3 puntos.
-- **E, R, M, O, S, Rch** (Excelencia, Resistencia, Militar, Oro, Sociedad, Racha) = 1 punto cada uno.
+- **E, R, M, O, S** (Excelencia, Resistencia, Militar, Oro, Sociedad) = 1 punto cada uno.
   Estos los escribes tú mismo en el campo "Bonos" al registrar la partida.
-- **MG (Matagigantes)** y **RLP (Relámpago)** se calculan **automáticamente** por el sistema,
-  con base en la posición del jugador y la duración de la partida — no se ingresan a mano:
+- **Rch (Racha)**, **MG (Matagigantes)** y **RLP (Relámpago)** se calculan **automáticamente**
+  por el sistema — no se ingresan a mano:
+  - **Rch**: se otorga cuando un jugador gana una partida justo después de haber ganado la
+    anterior (una derrota rompe la racha). Vale 1 punto.
   - **RLP**: se activa desde la primera partida del mes, en cualquier partida ganada en menos
     de 60 minutos. Posición 1-10 → 1pt, 11-15 → 2pt, 16 en adelante → 3pt. Aplica a cualquiera.
   - **MG**: solo se activa desde "Fecha 06" en adelante. Se otorga a un ganador que **no** esté

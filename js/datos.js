@@ -45,7 +45,7 @@ const ETIQUETAS_BONO = {
   S: "Sociedad", Rch: "Racha", MG: "Matagigantes", RLP: "Relampago"
 };
 
-const BONOS_SIMPLES = ["E", "R", "M", "O", "S", "Rch"]; // suman 1 punto automatico cada uno
+const BONOS_SIMPLES = ["E", "R", "M", "O", "S"]; // suman 1 punto automatico cada uno (Rch ahora se calcula solo, por racha)
 const BONOS_METODOLOGIA_APARTE = ["MG", "RLP"]; // su puntaje se calcula fuera y se ingresa manualmente en "puntosBonoExtra"
 
 async function cargarDatos() {
@@ -375,7 +375,10 @@ function calcularTablaClasificacion(todasLasPartidas, equivalencias, anio, mes, 
       tb,
       variacion: varDeEstaJornada[j.nombre] ?? 0
     };
-  }).sort((a, b) => b.puntos - a.puntos);
+  })
+  .filter(f => f.partidas > 0 && f.puntos > 0)
+  .sort((a, b) => b.puntos - a.puntos)
+  .slice(0, 25);
 
   return {
     filas,
@@ -414,6 +417,7 @@ function tramoDePuntos(posicion, limites) {
 function calcularBonosAutomaticosDelMes(partidasDelMesAsc, equivalencias) {
   let acumulado = [];
   const resultado = [];
+  const ultimoResultadoPorJugador = {}; // nombre oficial -> "victoria" | "derrota"
 
   partidasDelMesAsc.forEach(original => {
     const rankingAntes = Object.values(calcularEstadisticasJugadores(acumulado, equivalencias))
@@ -425,6 +429,19 @@ function calcularBonosAutomaticosDelMes(partidasDelMesAsc, equivalencias) {
 
     const jugadoresAnotados = (original.jugadores || []).map(j => ({ ...j, bonos: [...(j.bonos || [])] }));
     const resueltos = jugadoresAnotados.map(j => ({ ref: j, nombreOficial: resolverNombreOficial(j.nombre, equivalencias) }));
+
+    // Racha: se activa cuando la victoria actual viene INMEDIATAMENTE después de otra
+    // victoria del mismo jugador (su partida previa, sin importar jornada). Una derrota
+    // rompe la racha; la siguiente victoria después de una derrota no cuenta, pero deja
+    // habilitado el bono para la que sigue si vuelve a ganar.
+    resueltos.forEach(r => {
+      const anterior = ultimoResultadoPorJugador[r.nombreOficial];
+      if (r.ref.resultado === "victoria" && anterior === "victoria") {
+        r.ref.bonos.push("Rch");
+        r.ref.puntosBonoExtra = (r.ref.puntosBonoExtra || 0) + 1;
+      }
+      ultimoResultadoPorJugador[r.nombreOficial] = r.ref.resultado;
+    });
 
     const ganadores = resueltos.filter(r => r.ref.resultado === "victoria");
     const perdedores = resueltos.filter(r => r.ref.resultado === "derrota");

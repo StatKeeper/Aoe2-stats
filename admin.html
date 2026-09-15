@@ -40,8 +40,8 @@
       o por separado con <code>duracion: HH:MM:SS</code>).<br>
       Luego una línea por jugador con tus columnas de siempre:<br>
       <code>Jugador | Pts | E | R | M | O | S | Rch | MG | RLP | UnidAsesinadas | EdifArrasados | Equipo | Civilización</code><br>
-      <strong>Pts</strong>: 3 si ganó, 0 si perdió. Los bonos E/R/M/O/S/Rch van con 1 (sí) o 0 (no).
-      Las columnas <strong>MG y RLP se ignoran</strong> (se calculan solas) — puedes dejarlas en 0
+      <strong>Pts</strong>: 3 si ganó, 0 si perdió. Los bonos E/R/M/O/S van con 1 (sí) o 0 (no).
+      Las columnas <strong>Rch, MG y RLP se ignoran</strong> (se calculan solas) — puedes dejarlas en 0
       como siempre, no afectan nada.
     </p>
     <textarea id="input-reporte" placeholder="año 2026
@@ -219,7 +219,9 @@ function procesarReporte() {
 
     // Formato: Jugador | Pts(3 o 0) | E | R | M | O | S | Rch | MG | RLP | UAses | EArr | Equipo | Civ
     // Las columnas MG y RLP se IGNORAN a propósito: el sistema las calcula automáticamente.
-    const [nombre, ptsRaw, eRaw, rRaw, mRaw, oRaw, sRaw, rchRaw, , , uAsesRaw, eArrRaw, equipo, civ] = partes;
+    const [nombre, ptsRaw, eRaw, rRaw, mRaw, oRaw, sRaw, , , , uAsesRaw, eArrRaw, equipo, civ] = partes;
+    // La columna de "Rch" (posición 8) se ignora a propósito: el sistema calcula la
+    // racha automáticamente según si el jugador ganó también su partida inmediata anterior.
 
     const bonos = [];
     if (parseInt(eRaw, 10) > 0) bonos.push("E");
@@ -227,7 +229,6 @@ function procesarReporte() {
     if (parseInt(mRaw, 10) > 0) bonos.push("M");
     if (parseInt(oRaw, 10) > 0) bonos.push("O");
     if (parseInt(sRaw, 10) > 0) bonos.push("S");
-    if (parseInt(rchRaw, 10) > 0) bonos.push("Rch");
 
     jugadores.push({
       nombre,
