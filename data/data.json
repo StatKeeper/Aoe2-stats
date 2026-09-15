@@ -23,6 +23,22 @@
     {
       "antiguo": "Little duck",
       "oficial": "Little duck"
+    },
+    {
+      "antiguo": "Saul Goodman",
+      "oficial": "Saul Goodman"
+    },
+    {
+      "antiguo": "Nova_8",
+      "oficial": "Nova_8"
+    },
+    {
+      "antiguo": "yo",
+      "oficial": "yo"
+    },
+    {
+      "antiguo": "[cLm] Persie",
+      "oficial": "[cLm] Persie"
     }
   ],
   "partidas": [
@@ -94,6 +110,78 @@
           "bonos": [
             "R",
             "M"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-08-Fecha02-P1",
+      "anio": 2026,
+      "mes": "08",
+      "jornada": "Fecha 02",
+      "numeroPartida": 1,
+      "duracionSeg": 6345,
+      "jugadores": [
+        {
+          "nombre": "Saul Goodman",
+          "resultado": "derrota",
+          "civ": "Españoles",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5312,
+          "edificiosArrasados": 120,
+          "bonos": []
+        },
+        {
+          "nombre": "P@K()",
+          "resultado": "derrota",
+          "civ": "Celtas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5951,
+          "edificiosArrasados": 104,
+          "bonos": []
+        },
+        {
+          "nombre": "Nova_8",
+          "resultado": "derrota",
+          "civ": "Mongoles",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 8285,
+          "edificiosArrasados": 154,
+          "bonos": [
+            "R",
+            "M"
+          ]
+        },
+        {
+          "nombre": "yo",
+          "resultado": "victoria",
+          "civ": "Españoles",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 5507,
+          "edificiosArrasados": 163,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "[cLm] Persic",
+          "resultado": "victoria",
+          "civ": "Celtas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4669,
+          "edificiosArrasados": 58,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Mongoles",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 6002,
+          "edificiosArrasados": 82,
+          "bonos": [
+            "E",
+            "S"
           ]
         }
       ]
