@@ -77,15 +77,16 @@ Little duck | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 6502 | 28 | Equipo 2 | Turcos"
   </div>
 
   <div class="panel">
-    <h3>⑤ Nacionalidad de jugadores (bandera en su perfil)</h3>
+    <h3>⑤ Nacionalidad y civilización favorita</h3>
     <p class="hint">
-      Escribe el nombre oficial exacto del jugador y su código de país de 2 letras
-      (ej. Perú = PE, Argentina = AR, México = MX, España = ES, Colombia = CO, Chile = CL).
-      Esto solo agrega una bandera junto a su perfil, no afecta estadísticas.
+      Escribe el nombre oficial exacto del jugador, su código de país de 2 letras
+      (ej. Perú = PE, Argentina = AR, México = MX, España = ES, Colombia = CO, Chile = CL)
+      y, si quieres, su civilización favorita. Ambos campos son editables en cualquier momento.
     </p>
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
       <input type="text" id="input-pais-jugador" placeholder="Nombre oficial (ej. GJ Euphory)" style="flex:2; min-width:180px;">
       <input type="text" id="input-pais-codigo" maxlength="2" placeholder="PE" style="flex:0 0 70px; text-transform:uppercase;">
+      <input type="text" id="input-civ-favorita" placeholder="Civilización favorita (opc.)" style="flex:1.5; min-width:160px;">
       <button class="btn secondary" onclick="agregarPais()">Guardar</button>
     </div>
     <div id="lista-paises"></div>
@@ -122,7 +123,7 @@ Little duck | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 6502 | 28 | Equipo 2 | Turcos"
 
 <script src="js/datos.js"></script>
 <script>
-let DATOS = { equivalencias: [], partidas: [], paises: {} };
+let DATOS = { equivalencias: [], partidas: [], jugadoresInfo: {} };
 
 function actualizarContador() {
   document.getElementById("contador-partidas").textContent =
@@ -138,7 +139,15 @@ async function cargarDesdeServidor() {
     DATOS = await resp.json();
     if (!Array.isArray(DATOS.partidas)) DATOS.partidas = [];
     if (!Array.isArray(DATOS.equivalencias)) DATOS.equivalencias = [];
-    if (!DATOS.paises || typeof DATOS.paises !== "object") DATOS.paises = {};
+    if (!DATOS.jugadoresInfo || typeof DATOS.jugadoresInfo !== "object") {
+      DATOS.jugadoresInfo = {};
+      if (DATOS.paises && typeof DATOS.paises === "object") {
+        Object.entries(DATOS.paises).forEach(([nombre, pais]) => {
+          DATOS.jugadoresInfo[nombre] = { pais, civFavorita: "" };
+        });
+        delete DATOS.paises;
+      }
+    }
     estado.textContent = `✔ Cargado: ${DATOS.partidas.length} partidas existentes.`;
   } catch (e) {
     estado.textContent = "⚠ No se encontró data.json publicado todavía (se empezará desde cero).";
@@ -335,35 +344,46 @@ function eliminarEquivalencia(i) {
 
 function renderizarPaises() {
   const cont = document.getElementById("lista-paises");
-  const nombres = Object.keys(DATOS.paises || {});
+  const nombres = Object.keys(DATOS.jugadoresInfo || {});
   if (nombres.length === 0) {
-    cont.innerHTML = `<p class="hint">Todavía no hay banderas asignadas.</p>`;
+    cont.innerHTML = `<p class="hint">Todavía no hay información asignada.</p>`;
     return;
   }
-  cont.innerHTML = nombres.map(nombre => `
+  cont.innerHTML = nombres.map(nombre => {
+    const info = DATOS.jugadoresInfo[nombre] || {};
+    return `
     <div class="match-item">
-      <span>${banderaEmoji(DATOS.paises[nombre])} ${nombre} <span style="color:var(--text-dim);">(${DATOS.paises[nombre]})</span></span>
+      <span>
+        ${info.pais ? `<img src="https://flagcdn.com/w40/${info.pais.toLowerCase()}.png" style="width:20px; vertical-align:middle; margin-right:6px; border-radius:2px;">` : ""}
+        ${nombre} <span style="color:var(--text-dim);">${info.pais ? `(${info.pais})` : ""}${info.civFavorita ? ` · ${info.civFavorita}` : ""}</span>
+      </span>
       <button class="btn secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="eliminarPais('${nombre.replace(/'/g,"\\'")}')">🗑</button>
     </div>
-  `).join("");
+  `;
+  }).join("");
 }
 
 function agregarPais() {
   const nombre = document.getElementById("input-pais-jugador").value.trim();
   const codigo = document.getElementById("input-pais-codigo").value.trim().toUpperCase();
-  if (!nombre || codigo.length !== 2) {
-    alert("Escribe el nombre oficial y un código de país de exactamente 2 letras.");
+  const civFavorita = document.getElementById("input-civ-favorita").value.trim();
+  if (!nombre || (codigo && codigo.length !== 2)) {
+    alert("Escribe el nombre oficial. Si pones país, debe ser de exactamente 2 letras.");
     return;
   }
-  if (!DATOS.paises) DATOS.paises = {};
-  DATOS.paises[nombre] = codigo;
+  if (!DATOS.jugadoresInfo) DATOS.jugadoresInfo = {};
+  DATOS.jugadoresInfo[nombre] = {
+    pais: codigo || (DATOS.jugadoresInfo[nombre]?.pais || ""),
+    civFavorita: civFavorita || (DATOS.jugadoresInfo[nombre]?.civFavorita || "")
+  };
   document.getElementById("input-pais-jugador").value = "";
   document.getElementById("input-pais-codigo").value = "";
+  document.getElementById("input-civ-favorita").value = "";
   renderizarPaises();
 }
 
 function eliminarPais(nombre) {
-  delete DATOS.paises[nombre];
+  delete DATOS.jugadoresInfo[nombre];
   renderizarPaises();
 }
 

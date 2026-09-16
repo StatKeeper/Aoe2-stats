@@ -49,7 +49,7 @@
 <script>
 let PARTIDAS = [];
 let EQUIVALENCIAS = [];
-let PAISES = {};
+let JUGADORES_INFO = {};
 
 function pintarPerfil(nombre) {
   const cont = document.getElementById("contenido-perfil");
@@ -64,7 +64,9 @@ function pintarPerfil(nombre) {
   const winRate = stats.partidas > 0 ? Math.round((stats.victorias / stats.partidas) * 100) : 0;
   const promTiempo = stats.partidas > 0 ? Math.round(stats.segundosTotales / stats.partidas) : 0;
   const inicial = stats.nombre.replace(/\[.*?\]/g, "").trim().charAt(0).toUpperCase() || "?";
-  const codigoPais = PAISES[stats.nombre];
+  const info = JUGADORES_INFO[stats.nombre] || {};
+  const codigoPais = info.pais;
+  const civFavorita = info.civFavorita;
   const contenidoAvatar = codigoPais
     ? `<img src="https://flagcdn.com/w160/${codigoPais.toLowerCase()}.png" alt="${codigoPais}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`
     : inicial;
@@ -79,7 +81,7 @@ function pintarPerfil(nombre) {
       <div class="avatar" style="${codigoPais ? 'overflow:hidden; padding:0;' : ''}">${contenidoAvatar}</div>
       <div>
         <h1>${stats.nombre}</h1>
-        <div class="tagline">${stats.partidas} partidas jugadas · ${winRate}% victorias</div>
+        <div class="tagline">${stats.partidas} partidas jugadas · ${winRate}% victorias${civFavorita ? ` · ⭐ Favorita: ${civFavorita}` : ""}</div>
       </div>
     </div>
 
@@ -163,7 +165,7 @@ function descargarImagenPerfil() {
   const datos = await cargarDatos();
   PARTIDAS = datos.partidas;
   EQUIVALENCIAS = datos.equivalencias;
-  PAISES = datos.paises || {};
+  JUGADORES_INFO = datos.jugadoresInfo || {};
   poblarBuscador();
 })();
 </script>

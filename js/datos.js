@@ -56,11 +56,20 @@ async function cargarDatos() {
     const equivalencias = Array.isArray(json.equivalencias) ? json.equivalencias : [];
     const partidasCrudas = Array.isArray(json.partidas) ? json.partidas : [];
     const partidas = prepararPartidasConBonosAutomaticos(partidasCrudas, equivalencias);
-    const paises = (json.paises && typeof json.paises === "object") ? json.paises : {};
-    return { equivalencias, partidas, paises };
+    // jugadoresInfo: { "Nombre Oficial": { pais: "PE", civFavorita: "Mayas" } }
+    // Mantiene compatibilidad con el campo antiguo 'paises' (solo país) por si existiera.
+    let jugadoresInfo = {};
+    if (json.jugadoresInfo && typeof json.jugadoresInfo === "object") {
+      jugadoresInfo = json.jugadoresInfo;
+    } else if (json.paises && typeof json.paises === "object") {
+      Object.entries(json.paises).forEach(([nombre, pais]) => {
+        jugadoresInfo[nombre] = { pais, civFavorita: "" };
+      });
+    }
+    return { equivalencias, partidas, jugadoresInfo };
   } catch (e) {
     console.error("Error cargando datos:", e);
-    return { equivalencias: [], partidas: [], paises: {} };
+    return { equivalencias: [], partidas: [], jugadoresInfo: {} };
   }
 }
 
