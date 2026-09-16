@@ -1,5 +1,10 @@
 {
-  "equivalencias": [],
+  "equivalencias": [
+    {
+      "antiguo": "Ciro el Joven",
+      "oficial": "Aureliano"
+    }
+  ],
   "partidas": [
     {
       "id": "2026-09-Fecha01-P1",
