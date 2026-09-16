@@ -1239,7 +1239,10 @@
           "edificiosArrasados": 105,
           "bonos": []
         }
-      ]
+      ],
+      "jugadorDestacado": "",
+      "imagenEvaluacion": "https://github.com/StatKeeper/Aoe2-stats/blob/main/imagenes/candidatos_fecha_05.png",
+      "imagenGalardon": "https://github.com/StatKeeper/Aoe2-stats/blob/main/imagenes/galardon_fecha_05.png"
     }
   ],
   "jugadoresInfo": {
