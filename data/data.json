@@ -1,4 +1,486 @@
 {
   "equivalencias": [],
-  "partidas": []
+  "partidas": [],
+  "jugadoresInfo": {
+    ".com/@AnoMaMy_8": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "[cLm] Falco Lombardi": {
+      "pais": "BO",
+      "civFavorita": "Inca"
+    },
+    "[cLm] Gerard": {
+      "pais": "PE",
+      "civFavorita": "Teuton"
+    },
+    "[cLm] KFICHO": {
+      "pais": "PE",
+      "civFavorita": ""
+    },
+    "[cLm] MalditoFutre": {
+      "pais": "CL",
+      "civFavorita": ""
+    },
+    "[cLm] Persie": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "[cLm] Renjifo": {
+      "pais": "BO",
+      "civFavorita": "Teuton"
+    },
+    "[cLm]diego.leal5": {
+      "pais": "MX",
+      "civFavorita": ""
+    },
+    "__Cuerv0_IIVII410": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "_Google": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "¢н??¢?": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "123 Dabs": {
+      "pais": "US",
+      "civFavorita": ""
+    },
+    "12Kills": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "7ommy": {
+      "pais": "VN",
+      "civFavorita": ""
+    },
+    "AAAwesomeGuy": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Anciano": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "AntiBuddy": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Arcy": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Aureliano": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "B AZAR360": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Benums": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "BioTiNe": {
+      "pais": "MX",
+      "civFavorita": ""
+    },
+    "BlackHorse": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "bLItzKrleG*RoMMeL": {
+      "pais": "PE",
+      "civFavorita": ""
+    },
+    "bluebitsq78": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Boat": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "BOSTERO": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "bromanbillus": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "BullRunner": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Cacha": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "carlinhos": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Coleman": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "cumplear": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "DIA DIA 02": {
+      "pais": "CN",
+      "civFavorita": ""
+    },
+    "Dirty_rat": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Donald Trump": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Ecbert": {
+      "pais": "BR",
+      "civFavorita": ""
+    },
+    "Elraf": {
+      "pais": "CL",
+      "civFavorita": "Jemer"
+    },
+    "Erik Tha Barbaro": {
+      "pais": "MX",
+      "civFavorita": ""
+    },
+    "Fenix": {
+      "pais": "MX",
+      "civFavorita": ""
+    },
+    "Fireknight": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "FoNcHiO!": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "frkndmly": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Furan": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Gato :3": {
+      "pais": "PE",
+      "civFavorita": ""
+    },
+    "GGAMER": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "GGINDU": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "GJ Euphory": {
+      "pais": "PE",
+      "civFavorita": ""
+    },
+    "GoldiGlock": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Happy": {
+      "pais": "TW",
+      "civFavorita": ""
+    },
+    "Hipoflash": {
+      "pais": "CL",
+      "civFavorita": ""
+    },
+    "HTL_A3rty": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "J@@@": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Jackey9522": {
+      "pais": "CN",
+      "civFavorita": ""
+    },
+    "JB": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "Jkaarem": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "Kartoos": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "kimchi": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "king vitt": {
+      "pais": "CN",
+      "civFavorita": ""
+    },
+    "Knar": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Komodo3000": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "La_Gloire": {
+      "pais": "MX",
+      "civFavorita": ""
+    },
+    "Levi": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "Little duck": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "LVA-Gleich": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "MacGyver (RubenS)": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Majestic": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "malbieri": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Meriats": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Mojo jojo": {
+      "pais": "CL",
+      "civFavorita": ""
+    },
+    "Monday 007": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "muendo": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Nova_8": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "P@K()": {
+      "pais": "MX",
+      "civFavorita": ""
+    },
+    "Papita Huayro": {
+      "pais": "PE",
+      "civFavorita": ""
+    },
+    "Peon": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Peter Aio": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Player": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Quino": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "rabuegia": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "RedMESC": {
+      "pais": "CO",
+      "civFavorita": ""
+    },
+    "robincule": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Rocket Bunny": {
+      "pais": "BR",
+      "civFavorita": ""
+    },
+    "rod": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "rushwarwarrior": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Santiago RC": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Saturno 1343": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Saul Goodman": {
+      "pais": "CL",
+      "civFavorita": "Teuton"
+    },
+    "Shop kepper": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Speedracer 5.0": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Spicy License 735": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "su.li18": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Taco": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "TAG_Brian": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Tailfeather28": {
+      "pais": "US",
+      "civFavorita": ""
+    },
+    "Tartus": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "THameed": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "The Punisher": {
+      "pais": "AR",
+      "civFavorita": ""
+    },
+    "This is the way": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Tlaxcoaque": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "TR.!": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Tres Tres Tres": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Trotamundos": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Troy.exe": {
+      "pais": "PA",
+      "civFavorita": ""
+    },
+    "truc.itsm": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "ullaj1999": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Ustukuddus": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "VicRoldanG": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "villager 12": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Wag": {
+      "pais": "MX",
+      "civFavorita": ""
+    },
+    "Wall": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Warrior Chief": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "WNxkl": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Ww.Choko_krispi": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Xchopan": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "Yin": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "yo": {
+      "pais": "TW",
+      "civFavorita": ""
+    },
+    "Your true papa": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "主不修善果 只爱石油军": {
+      "pais": "",
+      "civFavorita": ""
+    },
+    "勇战到底": {
+      "pais": "",
+      "civFavorita": ""
+    }
+  }
 }
