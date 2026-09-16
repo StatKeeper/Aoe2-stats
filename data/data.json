@@ -72,7 +72,10 @@
             "S"
           ]
         }
-      ]
+      ],
+      "jugadorDestacado": "",
+      "imagenEvaluacion": "candidatos_fecha_01.png",
+      "imagenGalardon": "candidatos_fecha_01.png"
     },
     {
       "id": "2026-08-Fecha01-P1",
