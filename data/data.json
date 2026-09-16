@@ -148,6 +148,1093 @@
           ]
         }
       ]
+    },
+    {
+      "id": "2026-09-Fecha01-P2",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 01",
+      "numeroPartida": 2,
+      "duracionSeg": 7856,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "victoria",
+          "civ": "Italianos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 7567,
+          "edificiosArrasados": 244,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 12733,
+          "edificiosArrasados": 372,
+          "bonos": [
+            "E",
+            "M"
+          ]
+        },
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "victoria",
+          "civ": "Portugueses",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 6343,
+          "edificiosArrasados": 75,
+          "bonos": [
+            "O",
+            "S"
+          ]
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Wei",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5276,
+          "edificiosArrasados": 119,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm]diego.leal5",
+          "resultado": "derrota",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 5492,
+          "edificiosArrasados": 71,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Persie",
+          "resultado": "derrota",
+          "civ": "Portugueses",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4552,
+          "edificiosArrasados": 38,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Wei",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4579,
+          "edificiosArrasados": 26,
+          "bonos": []
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "derrota",
+          "civ": "Italianos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 6289,
+          "edificiosArrasados": 109,
+          "bonos": [
+            "R"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha02-P1",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 02",
+      "numeroPartida": 1,
+      "duracionSeg": 5017,
+      "jugadores": [
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Coreanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 4319,
+          "edificiosArrasados": 90,
+          "bonos": [
+            "E",
+            "M",
+            "S"
+          ]
+        },
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "victoria",
+          "civ": "Tártaros",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2905,
+          "edificiosArrasados": 164,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "ErikThaBarbaro",
+          "resultado": "victoria",
+          "civ": "Vikingos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 3280,
+          "edificiosArrasados": 116,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "derrota",
+          "civ": "Coreanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3007,
+          "edificiosArrasados": 25,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "derrota",
+          "civ": "Tártaros",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3622,
+          "edificiosArrasados": 18,
+          "bonos": []
+        },
+        {
+          "nombre": "Elraf",
+          "resultado": "derrota",
+          "civ": "Vikingos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4223,
+          "edificiosArrasados": 31,
+          "bonos": [
+            "R"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha02-P2",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 02",
+      "numeroPartida": 2,
+      "duracionSeg": 3322,
+      "jugadores": [
+        {
+          "nombre": "ErikThaBarbaro",
+          "resultado": "victoria",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2316,
+          "edificiosArrasados": 69,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "victoria",
+          "civ": "Vikingos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1771,
+          "edificiosArrasados": 20,
+          "bonos": []
+        },
+        {
+          "nombre": "Elraf",
+          "resultado": "victoria",
+          "civ": "Turcos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1507,
+          "edificiosArrasados": 22,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "victoria",
+          "civ": "Británicos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2319,
+          "edificiosArrasados": 171,
+          "bonos": [
+            "E",
+            "O"
+          ]
+        },
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "derrota",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2119,
+          "edificiosArrasados": 57,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "derrota",
+          "civ": "Vikingos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1146,
+          "edificiosArrasados": 12,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "derrota",
+          "civ": "Turcos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2674,
+          "edificiosArrasados": 26,
+          "bonos": [
+            "R",
+            "M"
+          ]
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "derrota",
+          "civ": "Británicos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1879,
+          "edificiosArrasados": 35,
+          "bonos": []
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha02-P3",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 02",
+      "numeroPartida": 3,
+      "duracionSeg": 10647,
+      "jugadores": [
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "victoria",
+          "civ": "Bizantinos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 13675,
+          "edificiosArrasados": 152,
+          "bonos": [
+            "M"
+          ]
+        },
+        {
+          "nombre": "Elraf",
+          "resultado": "victoria",
+          "civ": "Tártaros",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 13395,
+          "edificiosArrasados": 299,
+          "bonos": [
+            "E",
+            "S"
+          ]
+        },
+        {
+          "nombre": "ErikThaBarbaro",
+          "resultado": "victoria",
+          "civ": "Vietnamitas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5837,
+          "edificiosArrasados": 136,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Sarracenos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 9024,
+          "edificiosArrasados": 84,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "derrota",
+          "civ": "Tártaros",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 8341,
+          "edificiosArrasados": 173,
+          "bonos": []
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "derrota",
+          "civ": "Bizantinos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 11051,
+          "edificiosArrasados": 73,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] MalditoFutre",
+          "resultado": "derrota",
+          "civ": "Vietnamitas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3841,
+          "edificiosArrasados": 30,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Persie",
+          "resultado": "derrota",
+          "civ": "Sarracenos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 9775,
+          "edificiosArrasados": 138,
+          "bonos": [
+            "R"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha03-P1",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 03",
+      "numeroPartida": 1,
+      "duracionSeg": 3994,
+      "jugadores": [
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "victoria",
+          "civ": "Chinos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3624,
+          "edificiosArrasados": 45,
+          "bonos": []
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "victoria",
+          "civ": "Mayas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1771,
+          "edificiosArrasados": 37,
+          "bonos": []
+        },
+        {
+          "nombre": "ErikThaBarbaro",
+          "resultado": "victoria",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4079,
+          "edificiosArrasados": 58,
+          "bonos": [
+            "E"
+          ]
+        },
+        {
+          "nombre": "[cLm]diego.leal5",
+          "resultado": "victoria",
+          "civ": "Cumanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2054,
+          "edificiosArrasados": 120,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "derrota",
+          "civ": "Chinos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 3183,
+          "edificiosArrasados": 66,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Mayas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 468,
+          "edificiosArrasados": 0,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "BioTiNe",
+          "resultado": "derrota",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 6972,
+          "edificiosArrasados": 113,
+          "bonos": [
+            "R",
+            "M"
+          ]
+        },
+        {
+          "nombre": "Gato :3",
+          "resultado": "derrota",
+          "civ": "Cumanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1581,
+          "edificiosArrasados": 44,
+          "bonos": [
+            "O"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha03-P2",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 03",
+      "numeroPartida": 2,
+      "duracionSeg": 14038,
+      "jugadores": [
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "victoria",
+          "civ": "Shu",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 14296,
+          "edificiosArrasados": 157,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Polacos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 10302,
+          "edificiosArrasados": 139,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm]diego.leal5",
+          "resultado": "victoria",
+          "civ": "Bizantinos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 11411,
+          "edificiosArrasados": 135,
+          "bonos": []
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "victoria",
+          "civ": "Coreanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 15460,
+          "edificiosArrasados": 93,
+          "bonos": [
+            "E",
+            "M"
+          ]
+        },
+        {
+          "nombre": "BioTiNe",
+          "resultado": "derrota",
+          "civ": "Shu",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 10818,
+          "edificiosArrasados": 223,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "derrota",
+          "civ": "Polacos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 11420,
+          "edificiosArrasados": 162,
+          "bonos": [
+            "R"
+          ]
+        },
+        {
+          "nombre": "ErikThaBarbaro",
+          "resultado": "derrota",
+          "civ": "Bizantinos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 7923,
+          "edificiosArrasados": 133,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Coreanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 7928,
+          "edificiosArrasados": 121,
+          "bonos": [
+            "O",
+            "S"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha04-P1",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 04",
+      "numeroPartida": 1,
+      "duracionSeg": 6776,
+      "jugadores": [
+        {
+          "nombre": "Elraf",
+          "resultado": "derrota",
+          "civ": "Eslavos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3791,
+          "edificiosArrasados": 57,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "derrota",
+          "civ": "Dravídicos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 7175,
+          "edificiosArrasados": 83,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Persie",
+          "resultado": "derrota",
+          "civ": "Sicilianos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 8068,
+          "edificiosArrasados": 42,
+          "bonos": [
+            "R",
+            "M"
+          ]
+        },
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "victoria",
+          "civ": "Eslavos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 7531,
+          "edificiosArrasados": 48,
+          "bonos": [
+            "E"
+          ]
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Dravídicos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5857,
+          "edificiosArrasados": 113,
+          "bonos": []
+        },
+        {
+          "nombre": "Gato :3",
+          "resultado": "victoria",
+          "civ": "Sicilianos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5454,
+          "edificiosArrasados": 170,
+          "bonos": [
+            "O"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha04-P2",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 04",
+      "numeroPartida": 2,
+      "duracionSeg": 2643,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "derrota",
+          "civ": "Británicos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 503,
+          "edificiosArrasados": 4,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Vikingos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 742,
+          "edificiosArrasados": 3,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "derrota",
+          "civ": "Persas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 752,
+          "edificiosArrasados": 33,
+          "bonos": [
+            "R"
+          ]
+        },
+        {
+          "nombre": "WaG",
+          "resultado": "victoria",
+          "civ": "Británicos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 228,
+          "edificiosArrasados": 8,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "Ciro el Joven",
+          "resultado": "victoria",
+          "civ": "Vikingos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2437,
+          "edificiosArrasados": 111,
+          "bonos": [
+            "E",
+            "M"
+          ]
+        },
+        {
+          "nombre": "__Cuerv0_lIVlI410",
+          "resultado": "victoria",
+          "civ": "Persas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1166,
+          "edificiosArrasados": 23,
+          "bonos": []
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha04-P3",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 04",
+      "numeroPartida": 3,
+      "duracionSeg": 6717,
+      "jugadores": [
+        {
+          "nombre": "Elraf",
+          "resultado": "derrota",
+          "civ": "Vikingos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 5576,
+          "edificiosArrasados": 64,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Persie",
+          "resultado": "derrota",
+          "civ": "Españoles",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 6129,
+          "edificiosArrasados": 79,
+          "bonos": []
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "derrota",
+          "civ": "Turcos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 7389,
+          "edificiosArrasados": 114,
+          "bonos": [
+            "R"
+          ]
+        },
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "victoria",
+          "civ": "Vikingos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 6823,
+          "edificiosArrasados": 96,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Españoles",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 9187,
+          "edificiosArrasados": 164,
+          "bonos": [
+            "E",
+            "M",
+            "O"
+          ]
+        },
+        {
+          "nombre": "[cLm] MalditoFutre",
+          "resultado": "victoria",
+          "civ": "Turcos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 6405,
+          "edificiosArrasados": 84,
+          "bonos": []
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha04-P4",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 04",
+      "numeroPartida": 4,
+      "duracionSeg": 4280,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "victoria",
+          "civ": "Persas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2679,
+          "edificiosArrasados": 146,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Italianos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1765,
+          "edificiosArrasados": 60,
+          "bonos": []
+        },
+        {
+          "nombre": "Fireknight",
+          "resultado": "victoria",
+          "civ": "Celtas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2874,
+          "edificiosArrasados": 207,
+          "bonos": [
+            "E",
+            "M",
+            "O"
+          ]
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Persas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2074,
+          "edificiosArrasados": 41,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "[cLm]diego.leal5",
+          "resultado": "derrota",
+          "civ": "Italianos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2682,
+          "edificiosArrasados": 30,
+          "bonos": [
+            "R"
+          ]
+        },
+        {
+          "nombre": "生不修善果 只爱石油军",
+          "resultado": "derrota",
+          "civ": "Celtas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1528,
+          "edificiosArrasados": 16,
+          "bonos": []
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha05-P1",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 05",
+      "numeroPartida": 1,
+      "duracionSeg": 2957,
+      "jugadores": [
+        {
+          "nombre": "GJ Euphory",
+          "resultado": "derrota",
+          "civ": "Etíopes",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1997,
+          "edificiosArrasados": 14,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "derrota",
+          "civ": "Italianos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 906,
+          "edificiosArrasados": 0,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "Gato :3",
+          "resultado": "derrota",
+          "civ": "Teutones",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1577,
+          "edificiosArrasados": 7,
+          "bonos": []
+        },
+        {
+          "nombre": "Little duck",
+          "resultado": "derrota",
+          "civ": "Búlgaros",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 3042,
+          "edificiosArrasados": 25,
+          "bonos": [
+            "R"
+          ]
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "victoria",
+          "civ": "Etíopes",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2465,
+          "edificiosArrasados": 192,
+          "bonos": [
+            "E"
+          ]
+        },
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "victoria",
+          "civ": "Italianos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1297,
+          "edificiosArrasados": 86,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "victoria",
+          "civ": "Búlgaros",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1262,
+          "edificiosArrasados": 113,
+          "bonos": [
+            "S"
+          ]
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Teutones",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3662,
+          "edificiosArrasados": 32,
+          "bonos": [
+            "M"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha05-P2",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 05",
+      "numeroPartida": 2,
+      "duracionSeg": 4149,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "victoria",
+          "civ": "Sarracenos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1619,
+          "edificiosArrasados": 50,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Persie",
+          "resultado": "victoria",
+          "civ": "Jemeres",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 1612,
+          "edificiosArrasados": 10,
+          "bonos": []
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "victoria",
+          "civ": "Persas",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2926,
+          "edificiosArrasados": 96,
+          "bonos": [
+            "E"
+          ]
+        },
+        {
+          "nombre": "[cLm] MalditoFutre",
+          "resultado": "victoria",
+          "civ": "Portugueses",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 742,
+          "edificiosArrasados": 14,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "derrota",
+          "civ": "Persas",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2840,
+          "edificiosArrasados": 58,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "derrota",
+          "civ": "Sarracenos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3258,
+          "edificiosArrasados": 67,
+          "bonos": [
+            "R",
+            "M"
+          ]
+        },
+        {
+          "nombre": "WaG",
+          "resultado": "derrota",
+          "civ": "Jemeres",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 1724,
+          "edificiosArrasados": 8,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "derrota",
+          "civ": "Portugueses",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 962,
+          "edificiosArrasados": 33,
+          "bonos": [
+            "S"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha05-P3",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 05",
+      "numeroPartida": 3,
+      "duracionSeg": 6035,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Birmanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 4638,
+          "edificiosArrasados": 71,
+          "bonos": []
+        },
+        {
+          "nombre": "WaG",
+          "resultado": "victoria",
+          "civ": "Hunos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 4673,
+          "edificiosArrasados": 44,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "victoria",
+          "civ": "Cumanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5768,
+          "edificiosArrasados": 39,
+          "bonos": []
+        },
+        {
+          "nombre": "BioTiNe",
+          "resultado": "victoria",
+          "civ": "Tártaros",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 6118,
+          "edificiosArrasados": 141,
+          "bonos": [
+            "E"
+          ]
+        },
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "derrota",
+          "civ": "Birmanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4543,
+          "edificiosArrasados": 32,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "derrota",
+          "civ": "Tártaros",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 6279,
+          "edificiosArrasados": 110,
+          "bonos": [
+            "R",
+            "M",
+            "S"
+          ]
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "derrota",
+          "civ": "Cumanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4458,
+          "edificiosArrasados": 116,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Persie",
+          "resultado": "derrota",
+          "civ": "Hunos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2668,
+          "edificiosArrasados": 105,
+          "bonos": []
+        }
+      ]
     }
   ],
   "jugadoresInfo": {
