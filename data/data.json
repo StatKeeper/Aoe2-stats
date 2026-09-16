@@ -1,6 +1,80 @@
 {
   "equivalencias": [],
-  "partidas": [],
+  "partidas": [
+    {
+      "id": "2026-09-Fecha01-P1",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 01",
+      "numeroPartida": 1,
+      "duracionSeg": 4701,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "derrota",
+          "civ": "Coreanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2300,
+          "edificiosArrasados": 12,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "[cLm]diego.leal5",
+          "resultado": "derrota",
+          "civ": "Dravídicos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2284,
+          "edificiosArrasados": 41,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Birmanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2840,
+          "edificiosArrasados": 17,
+          "bonos": [
+            "R"
+          ]
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "victoria",
+          "civ": "Coreanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2699,
+          "edificiosArrasados": 100,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Dravídicos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3896,
+          "edificiosArrasados": 56,
+          "bonos": [
+            "E",
+            "M"
+          ]
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Birmanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2841,
+          "edificiosArrasados": 39,
+          "bonos": [
+            "S"
+          ]
+        }
+      ]
+    }
+  ],
   "jugadoresInfo": {
     ".com/@AnoMaMy_8": {
       "pais": "",
