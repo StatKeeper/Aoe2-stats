@@ -592,3 +592,38 @@ function nombreSugeridoImagenFecha(anio, mes, jornada, tipo) {
   const jorPad = String(numJor).padStart(2, "0");
   return `imagenes/${tipo}_${anio}-${mesPad}_fecha${jorPad}.png`;
 }
+
+/**
+ * Descarga como imagen un elemento que puede contener tablas con scroll
+ * horizontal (overflow-x: auto). Expande temporalmente esos contenedores a
+ * su ancho completo antes de capturar con html2canvas (que de otra forma
+ * solo capturaría la porcion visible en pantallas angostas como el celular),
+ * y los devuelve a su estado normal apenas termina.
+ */
+function descargarElementoComoImagen(elemento, nombreArchivo, backgroundColor) {
+  const scrollables = elemento.querySelectorAll('[style*="overflow-x"]');
+  const estilosOriginales = [];
+  scrollables.forEach(sc => {
+    estilosOriginales.push({ el: sc, overflowX: sc.style.overflowX, width: sc.style.width });
+    sc.style.overflowX = "visible";
+    sc.style.width = "max-content";
+  });
+
+  const restaurar = () => {
+    estilosOriginales.forEach(o => {
+      o.el.style.overflowX = o.overflowX;
+      o.el.style.width = o.width;
+    });
+  };
+
+  html2canvas(elemento, { backgroundColor, scale: 2 }).then(canvas => {
+    restaurar();
+    const enlace = document.createElement("a");
+    enlace.href = canvas.toDataURL("image/png");
+    enlace.download = nombreArchivo;
+    enlace.click();
+  }).catch(err => {
+    restaurar();
+    console.error("Error generando la imagen:", err);
+  });
+}

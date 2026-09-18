@@ -217,12 +217,7 @@ function renderizar() {
 
 function descargarImagen() {
   const el = document.getElementById("captura-clasificacion");
-  html2canvas(el, { backgroundColor: "#14161c", scale: 2 }).then(canvas => {
-    const enlace = document.createElement("a");
-    enlace.href = canvas.toDataURL("image/png");
-    enlace.download = "clasificacion.png";
-    enlace.click();
-  });
+  descargarElementoComoImagen(el, "clasificacion.png", "#14161c");
 }
 
 (async function init() {

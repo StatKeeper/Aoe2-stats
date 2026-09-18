@@ -184,12 +184,7 @@ document.getElementById("input-buscar").addEventListener("change", (e) => {
 
 function descargarImagenPerfil() {
   const el = document.getElementById("contenido-perfil");
-  html2canvas(el, { backgroundColor: "#14161c", scale: 2 }).then(canvas => {
-    const enlace = document.createElement("a");
-    enlace.href = canvas.toDataURL("image/png");
-    enlace.download = "perfil-jugador.png";
-    enlace.click();
-  });
+  descargarElementoComoImagen(el, "perfil-jugador.png", "#14161c");
 }
 
 (async function init() {

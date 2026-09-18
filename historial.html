@@ -161,12 +161,7 @@ function render() {
 
 function descargarImagenPartida(id) {
   const el = document.getElementById(`card-${id}`);
-  html2canvas(el, { backgroundColor: "#1c2027", scale: 2 }).then(canvas => {
-    const enlace = document.createElement("a");
-    enlace.href = canvas.toDataURL("image/png");
-    enlace.download = `partida-${id}.png`;
-    enlace.click();
-  });
+  descargarElementoComoImagen(el, `partida-${id}.png`, "#1c2027");
 }
 
 (async function init() {

@@ -201,12 +201,7 @@ function consultar() {
 
 function descargarImagenStats() {
   const el = document.getElementById("resultado");
-  html2canvas(el, { backgroundColor: "#1c2027", scale: 2 }).then(canvas => {
-    const enlace = document.createElement("a");
-    enlace.href = canvas.toDataURL("image/png");
-    enlace.download = `estadisticas-${subtabActual}.png`;
-    enlace.click();
-  });
+  descargarElementoComoImagen(el, `estadisticas-${subtabActual}.png`, "#1c2027");
 }
 
 (async function init() {
