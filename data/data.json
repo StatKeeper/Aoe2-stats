@@ -1522,6 +1522,13 @@
       "jornada": "Fecha 01",
       "imagenEvaluacion": "imagenes/candidatos_2026-09_fecha01.png",
       "imagenGalardon": "imagenes/galardon_2026-09_fecha01.png"
+    },
+    {
+      "anio": 2026,
+      "mes": "08",
+      "jornada": "Fecha 01",
+      "imagenEvaluacion": "imagenes/candidatos_2026-08_fecha01.png",
+      "imagenGalardon": "imagenes/galardon_2026-08_fecha01.png"
     }
   ],
   "civEquivalencias": []
