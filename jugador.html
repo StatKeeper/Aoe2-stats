@@ -32,6 +32,11 @@
     <datalist id="lista-nombres"></datalist>
   </div>
 
+  <div class="filters">
+    <select id="filtro-anio"></select>
+    <select id="filtro-mes"></select>
+  </div>
+
   <div id="contenido-perfil"></div>
   <button id="btn-descargar-perfil" class="btn secondary" style="display:none; margin-top:12px;" onclick="descargarImagenPerfil()">📷 Descargar Imagen</button>
 </main>
@@ -51,12 +56,38 @@ let PARTIDAS = [];
 let EQUIVALENCIAS = [];
 let JUGADORES_INFO = {};
 
+function partidasFiltradas() {
+  const anio = document.getElementById("filtro-anio").value;
+  const mes = document.getElementById("filtro-mes").value;
+  return PARTIDAS.filter(p =>
+    (anio === "" || p.anio == anio) &&
+    (mes === "" || String(p.mes).padStart(2, "0") === mes)
+  );
+}
+
+function poblarFiltrosPeriodo() {
+  const anios = [...new Set(PARTIDAS.map(p => p.anio))].sort((a, b) => b - a);
+  const selAnio = document.getElementById("filtro-anio");
+  selAnio.innerHTML = `<option value="">Todos los años</option>` + anios.map(a => `<option value="${a}">${a}</option>`).join("");
+
+  const meses = [...new Set(PARTIDAS.map(p => String(p.mes).padStart(2, "0")))].sort();
+  const selMes = document.getElementById("filtro-mes");
+  selMes.innerHTML = `<option value="">Todos los meses</option>` + meses.map(m => `<option value="${m}">${NOMBRES_MES[m]}</option>`).join("");
+
+  const rerender = () => {
+    const nombreActual = document.getElementById("input-buscar").value.trim();
+    if (nombreActual) pintarPerfil(nombreActual);
+  };
+  selAnio.addEventListener("change", rerender);
+  selMes.addEventListener("change", rerender);
+}
+
 function pintarPerfil(nombre) {
   const cont = document.getElementById("contenido-perfil");
-  const stats = calcularEstadisticasJugadores(PARTIDAS, EQUIVALENCIAS)[nombre];
+  const stats = calcularEstadisticasJugadores(partidasFiltradas(), EQUIVALENCIAS)[nombre];
 
   if (!stats) {
-    cont.innerHTML = `<div class="empty-state">No se encontraron partidas para "${nombre}".</div>`;
+    cont.innerHTML = `<div class="empty-state">No se encontraron partidas para "${nombre}" en este período.</div>`;
     document.getElementById("btn-descargar-perfil").style.display = "none";
     return;
   }

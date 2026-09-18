@@ -64,20 +64,23 @@
   const datos = await cargarDatos();
   const cont = document.getElementById("contenedor-galardon");
 
-  // Encuentra la partida más reciente (según Año/Mes/Jornada/Partida) que tenga imagenGalardon
-  const conGalardon = datos.partidas.filter(p => p.imagenGalardon);
+  const lista = datos.jornadasImagenes || [];
+  const conGalardon = lista.filter(j => j.imagenGalardon);
   if (conGalardon.length === 0) {
     cont.innerHTML = `<div class="empty-state">Todavía no se ha publicado ningún galardón.</div>`;
     return;
   }
 
-  conGalardon.sort((a, b) => claveOrden(b) - claveOrden(a));
+  conGalardon.sort((a, b) =>
+    claveOrden({ anio: b.anio, mes: b.mes, jornada: b.jornada, numeroPartida: 0 }) -
+    claveOrden({ anio: a.anio, mes: a.mes, jornada: a.jornada, numeroPartida: 0 })
+  );
   const ultima = conGalardon[0];
 
   cont.innerHTML = `
-    <img src="${ultima.imagenGalardon}" alt="Galardón ${etiquetaPartida(ultima)}">
-    <div class="etiqueta">👑 Jugador de la Fecha: ${ultima.jugadorDestacado || "—"}</div>
-    <div class="subetiqueta">${etiquetaPartida(ultima)} · ${NOMBRES_MES[ultima.mes]} ${ultima.anio}</div>
+    <img src="${ultima.imagenGalardon}" alt="Galardón ${ultima.jornada}">
+    <div class="etiqueta">👑 ${ultima.jornada}</div>
+    <div class="subetiqueta">${NOMBRES_MES[ultima.mes]} ${ultima.anio}</div>
   `;
 })();
 </script>

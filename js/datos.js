@@ -19,14 +19,18 @@
  *       "jornada": "Fecha 01",
  *       "numeroPartida": 1,
  *       "duracionSeg": 4020,
- *       "jugadorDestacado": "GJ Euphory",
- *       "imagenEvaluacion": "imagenes/....jpg",
- *       "imagenGalardon": "imagenes/....jpg",
  *       "jugadores": [
  *         { "nombre": "GJ Euphory", "resultado": "victoria", "civ": "Mayas",
  *           "equipo": "Equipo 1", "unidadesAsesinadas": 3700, "edificiosArrasados": 119,
  *           "bonos": ["E","M"] }
  *       ]
+ *     }
+ *   ],
+ *   "jornadasImagenes": [
+ *     {
+ *       "anio": 2026, "mes": "09", "jornada": "Fecha 05",
+ *       "imagenEvaluacion": "imagenes/candidatos_2026-09_fecha05.png",
+ *       "imagenGalardon": "imagenes/galardon_2026-09_fecha05.png"
  *     }
  *   ]
  * }
@@ -48,13 +52,23 @@ const ETIQUETAS_BONO = {
 const BONOS_SIMPLES = ["E", "R", "M", "O", "S"]; // suman 1 punto automatico cada uno (Rch ahora se calcula solo, por racha)
 const BONOS_METODOLOGIA_APARTE = ["MG", "RLP"]; // su puntaje se calcula fuera y se ingresa manualmente en "puntosBonoExtra"
 
+/** Calcula los puntos totales que un jugador ganó en UN registro/partida específico. */
+function puntosDeRegistro(registro) {
+  if (!registro) return 0;
+  const base = registro.resultado === "victoria" ? 3 : 0;
+  const bonosSimples = (registro.bonos || []).filter(b => BONOS_SIMPLES.includes(b)).length;
+  return base + bonosSimples + (registro.puntosBonoExtra || 0);
+}
+
 async function cargarDatos() {
   try {
     const resp = await fetch(`${RUTA_DATOS}?t=${Date.now()}`, { cache: "no-store" });
     if (!resp.ok) throw new Error("No se pudo leer data.json");
     const json = await resp.json();
     const equivalencias = Array.isArray(json.equivalencias) ? json.equivalencias : [];
-    const partidasCrudas = Array.isArray(json.partidas) ? json.partidas : [];
+    const civEquivalencias = Array.isArray(json.civEquivalencias) ? json.civEquivalencias : [];
+    let partidasCrudas = Array.isArray(json.partidas) ? json.partidas : [];
+    partidasCrudas = normalizarCivsEnPartidas(partidasCrudas, civEquivalencias);
     const partidas = prepararPartidasConBonosAutomaticos(partidasCrudas, equivalencias);
     // jugadoresInfo: { "Nombre Oficial": { pais: "PE", civFavorita: "Mayas" } }
     // Mantiene compatibilidad con el campo antiguo 'paises' (solo país) por si existiera.
@@ -66,11 +80,29 @@ async function cargarDatos() {
         jugadoresInfo[nombre] = { pais, civFavorita: "" };
       });
     }
-    return { equivalencias, partidas, jugadoresInfo };
+    const jornadasImagenes = Array.isArray(json.jornadasImagenes) ? json.jornadasImagenes : [];
+    return { equivalencias, civEquivalencias, partidas, jugadoresInfo, jornadasImagenes };
   } catch (e) {
     console.error("Error cargando datos:", e);
-    return { equivalencias: [], partidas: [], jugadoresInfo: {} };
+    return { equivalencias: [], civEquivalencias: [], partidas: [], jugadoresInfo: {}, jornadasImagenes: [] };
   }
+}
+
+/** Clave única para identificar una Fecha/Jornada dentro de un Año/Mes específico. */
+function claveJornada(anio, mes, jornada) {
+  return `${anio}-${String(mes).padStart(2, "0")}-${jornada}`;
+}
+
+/** Sugiere nombres de archivo para las imágenes de Candidatos de una Fecha, siguiendo el patrón candidatos_AAAA-MM_fechaNN.png / galardon_AAAA-MM_fechaNN.png */
+function sugerirNombresImagenes(anio, mes, jornadaTexto) {
+  const mesStr = String(mes).padStart(2, "0");
+  const numJor = numeroDeJornada(jornadaTexto);
+  const jorStr = String(numJor).padStart(2, "0");
+  const base = `${anio}-${mesStr}_fecha${jorStr}`;
+  return {
+    evaluacion: `imagenes/candidatos_${base}.png`,
+    galardon: `imagenes/galardon_${base}.png`
+  };
 }
 
 function resolverNombreOficial(nombreCrudo, equivalencias) {
@@ -377,7 +409,7 @@ function calcularTablaClasificacion(todasLasPartidas, equivalencias, anio, mes, 
       derrotas: j.derrotas,
       partidas: j.partidas,
       ultimoSuceso: registroUltima
-        ? [registroUltima.resultado === "victoria" ? "Victoria" : "Derrota", ...(registroUltima.bonos || [])].join(" + ")
+        ? `${[registroUltima.resultado === "victoria" ? "Victoria" : "Derrota", ...(registroUltima.bonos || [])].join(" + ")} (${puntosDeRegistro(registroUltima)} pts)`
         : "Sin participación",
       vd: registroUltima ? (registroUltima.resultado === "victoria" ? 1 : 0) : 0,
       bonos,
@@ -506,4 +538,57 @@ function banderaEmoji(codigoPais) {
   if (!codigoPais || codigoPais.length !== 2) return "";
   const base = 127397; // offset para regional indicator symbols
   return String.fromCodePoint(...codigoPais.toUpperCase().split("").map(c => c.charCodeAt(0) + base));
+}
+
+function resolverCivOficial(civCruda, civEquivalencias) {
+  if (!civCruda) return civCruda;
+  const limpio = civCruda.toLowerCase().trim();
+  const exacto = (civEquivalencias || []).find(e => e.antiguo.toLowerCase() === limpio);
+  return exacto ? exacto.oficial : civCruda.trim();
+}
+
+/** Aplica la correccion de civilizaciones a todas las partidas (no muta el original). */
+function normalizarCivsEnPartidas(partidas, civEquivalencias) {
+  if (!civEquivalencias || civEquivalencias.length === 0) return partidas;
+  return partidas.map(p => ({
+    ...p,
+    jugadores: (p.jugadores || []).map(j => ({
+      ...j,
+      civ: resolverCivOficial(j.civ, civEquivalencias)
+    }))
+  }));
+}
+
+/** Clave de orden cronologico para un objeto {anio, mes, jornada} (sin partida). */
+function claveOrdenJornadaObj(o) {
+  return (o.anio || 0) * 1e6 + parseInt(o.mes || "0", 10) * 1e4 + numeroDeJornada(o.jornada) * 1e2;
+}
+
+/** Etiqueta legible: "Fecha 05 . Septiembre 2026" */
+function etiquetaJornadaObj(o) {
+  return `${o.jornada} · ${NOMBRES_MES[String(o.mes).padStart(2,"0")] || o.mes} ${o.anio}`;
+}
+
+/** Nombre de archivo sugerido para las imagenes de una Fecha (Año/Mes/Jornada). */
+function sugerirNombresImagenFecha(anio, mes, jornada) {
+  const mesPad = String(mes).padStart(2, "0");
+  const numJor = numeroDeJornada(jornada);
+  const jorPad = String(numJor).padStart(2, "0");
+  return {
+    evaluacion: `imagenes/candidatos_${anio}-${mesPad}_fecha${jorPad}.png`,
+    galardon: `imagenes/galardon_${anio}-${mesPad}_fecha${jorPad}.png`
+  };
+}
+
+/** Clave numerica de orden para una jornada (sin partida): anio, mes, jornada. */
+function claveOrdenJornada(j) {
+  return (j.anio || 0) * 1e4 + parseInt(j.mes || "0", 10) * 1e2 + numeroDeJornada(j.jornada);
+}
+
+/** Nombre de archivo sugerido (sin ruta) para las imagenes de una Fecha. */
+function nombreSugeridoImagenFecha(anio, mes, jornada, tipo) {
+  const numJor = numeroDeJornada(jornada);
+  const mesPad = String(mes).padStart(2, "0");
+  const jorPad = String(numJor).padStart(2, "0");
+  return `imagenes/${tipo}_${anio}-${mesPad}_fecha${jorPad}.png`;
 }

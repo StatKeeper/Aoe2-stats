@@ -45,6 +45,11 @@
     <button class="subtab-btn" data-tab="sinergia" onclick="cambiarSubtab('sinergia')">🤝 Sinergia</button>
   </div>
 
+  <div class="filters">
+    <select id="filtro-anio"></select>
+    <select id="filtro-mes"></select>
+  </div>
+
   <div class="panel">
     <h3>Selecciona de 2 a 4 jugadores</h3>
     <div class="player-picker">
@@ -75,6 +80,31 @@
 let PARTIDAS = [], EQUIVALENCIAS = [];
 let subtabActual = "tiempos";
 
+function partidasFiltradas() {
+  const anio = document.getElementById("filtro-anio").value;
+  const mes = document.getElementById("filtro-mes").value;
+  return PARTIDAS.filter(p =>
+    (anio === "" || p.anio == anio) &&
+    (mes === "" || String(p.mes).padStart(2, "0") === mes)
+  );
+}
+
+function poblarFiltrosPeriodo() {
+  const anios = [...new Set(PARTIDAS.map(p => p.anio))].sort((a, b) => b - a);
+  const selAnio = document.getElementById("filtro-anio");
+  selAnio.innerHTML = `<option value="">Todos los años</option>` + anios.map(a => `<option value="${a}">${a}</option>`).join("");
+
+  const meses = [...new Set(PARTIDAS.map(p => String(p.mes).padStart(2, "0")))].sort();
+  const selMes = document.getElementById("filtro-mes");
+  selMes.innerHTML = `<option value="">Todos los meses</option>` + meses.map(m => `<option value="${m}">${NOMBRES_MES[m]}</option>`).join("");
+
+  const rerenderSiHayResultado = () => {
+    if (document.getElementById("resultado").style.display !== "none") consultar();
+  };
+  selAnio.addEventListener("change", rerenderSiHayResultado);
+  selMes.addEventListener("change", rerenderSiHayResultado);
+}
+
 function cambiarSubtab(tab) {
   subtabActual = tab;
   document.querySelectorAll(".subtab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
@@ -97,7 +127,7 @@ function consultar() {
   document.getElementById("btn-descargar-stats").style.display = "inline-block";
 
   if (subtabActual === "tiempos") {
-    const datos = compararJugadores(nombres, PARTIDAS, EQUIVALENCIAS);
+    const datos = compararJugadores(nombres, partidasFiltradas(), EQUIVALENCIAS);
     resultadoDiv.innerHTML = `
       <h3>⏱ Comparativa de Tiempos y Estadísticas</h3>
       <div style="overflow-x:auto;">
@@ -118,7 +148,7 @@ function consultar() {
   }
 
   if (subtabActual === "civs") {
-    const datos = compararJugadores(nombres, PARTIDAS, EQUIVALENCIAS);
+    const datos = compararJugadores(nombres, partidasFiltradas(), EQUIVALENCIAS);
     const todasLasCivs = [...new Set(datos.flatMap(d => Object.keys(d.civs)))].sort();
     if (todasLasCivs.length === 0) {
       resultadoDiv.innerHTML = `<div class="empty-state">Sin datos de civilización para estos jugadores.</div>`;
@@ -148,7 +178,7 @@ function consultar() {
   }
 
   if (subtabActual === "sinergia") {
-    const s = calcularSinergia(nombres, PARTIDAS, EQUIVALENCIAS);
+    const s = calcularSinergia(nombres, partidasFiltradas(), EQUIVALENCIAS);
     if (s.partidasJuntos === 0) {
       resultadoDiv.innerHTML = `
         <h3>🤝 Sinergia Grupal</h3>
@@ -183,6 +213,7 @@ function descargarImagenStats() {
   const datos = await cargarDatos();
   PARTIDAS = datos.partidas;
   EQUIVALENCIAS = datos.equivalencias;
+  poblarFiltrosPeriodo();
   document.getElementById("lista-nombres").innerHTML =
     listaDeNombresOficiales(PARTIDAS, EQUIVALENCIAS).map(n => `<option value="${n}">`).join("");
 })();
