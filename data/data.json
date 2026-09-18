@@ -1,6 +1,170 @@
 {
   "equivalencias": [],
-  "partidas": [],
+  "partidas": [
+    {
+      "id": "2026-09-Fecha01-P1",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 01",
+      "numeroPartida": 1,
+      "duracionSeg": 4701,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "derrota",
+          "civ": "Coreanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2300,
+          "edificiosArrasados": 12,
+          "bonos": [
+            "O"
+          ]
+        },
+        {
+          "nombre": "[cLm]diego.leal5",
+          "resultado": "derrota",
+          "civ": "Dravídicos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2284,
+          "edificiosArrasados": 41,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Birmanos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 2840,
+          "edificiosArrasados": 17,
+          "bonos": [
+            "R"
+          ]
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "victoria",
+          "civ": "Coreanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2699,
+          "edificiosArrasados": 100,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Dravídicos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 3896,
+          "edificiosArrasados": 56,
+          "bonos": [
+            "E",
+            "M"
+          ]
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Birmanos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 2841,
+          "edificiosArrasados": 39,
+          "bonos": [
+            "S"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-09-Fecha01-P2",
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 01",
+      "numeroPartida": 2,
+      "duracionSeg": 7856,
+      "jugadores": [
+        {
+          "nombre": "[cLm] Renjifo",
+          "resultado": "victoria",
+          "civ": "Italianos",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 7567,
+          "edificiosArrasados": 244,
+          "bonos": []
+        },
+        {
+          "nombre": "Papita Huayro",
+          "resultado": "victoria",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 12733,
+          "edificiosArrasados": 372,
+          "bonos": [
+            "E",
+            "M"
+          ]
+        },
+        {
+          "nombre": "[cLm] KFICHO",
+          "resultado": "victoria",
+          "civ": "Portugueses",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 6343,
+          "edificiosArrasados": 75,
+          "bonos": [
+            "O",
+            "S"
+          ]
+        },
+        {
+          "nombre": "[cLm] Gerard",
+          "resultado": "victoria",
+          "civ": "Wei",
+          "equipo": "Equipo 1",
+          "unidadesAsesinadas": 5276,
+          "edificiosArrasados": 119,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm]diego.leal5",
+          "resultado": "derrota",
+          "civ": "Bengalíes",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 5492,
+          "edificiosArrasados": 71,
+          "bonos": []
+        },
+        {
+          "nombre": "[cLm] Persie",
+          "resultado": "derrota",
+          "civ": "Portugueses",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4552,
+          "edificiosArrasados": 38,
+          "bonos": []
+        },
+        {
+          "nombre": "GGINDU",
+          "resultado": "derrota",
+          "civ": "Wei",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 4579,
+          "edificiosArrasados": 26,
+          "bonos": []
+        },
+        {
+          "nombre": "P@KO",
+          "resultado": "derrota",
+          "civ": "Italianos",
+          "equipo": "Equipo 2",
+          "unidadesAsesinadas": 6289,
+          "edificiosArrasados": 109,
+          "bonos": [
+            "R"
+          ]
+        }
+      ]
+    }
+  ],
   "jugadoresInfo": {
     ".com/@AnoMaMy_8": {
       "pais": "",
@@ -483,5 +647,14 @@
       "civFavorita": ""
     }
   },
-  "jornadasImagenes": []
+  "jornadasImagenes": [
+    {
+      "anio": 2026,
+      "mes": "09",
+      "jornada": "Fecha 01",
+      "imagenEvaluacion": "imagenes/candidatos_2026-09_fecha01.png",
+      "imagenGalardon": "imagenes/galardon_2026-09_fecha01.png"
+    }
+  ],
+  "civEquivalencias": []
 }
