@@ -59,6 +59,10 @@ Little duck | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 6502 | 28 | Equipo 2 | Turcos"
 
   <div class="panel">
     <h3>③ Partidas cargadas (eliminar si algo se ingresó mal)</h3>
+    <div style="display:flex; gap:8px; margin-bottom:10px;">
+      <select id="filtro-partidas-anio" onchange="poblarMesesPartidasFiltro(); renderizarListaPartidas();"></select>
+      <select id="filtro-partidas-mes" onchange="renderizarListaPartidas();"></select>
+    </div>
     <div id="lista-partidas"><p class="hint">Carga los datos primero (paso ①).</p></div>
   </div>
 
@@ -180,6 +184,7 @@ async function cargarDesdeServidor() {
   }
   if (!Array.isArray(DATOS.jornadasImagenes)) DATOS.jornadasImagenes = [];
   actualizarContador();
+  poblarFiltrosPartidas();
   renderizarListaPartidas();
   renderizarEquivalencias();
   renderizarCivEquivalencias();
@@ -301,6 +306,7 @@ function procesarReporte() {
 
   DATOS.partidas.push(nuevaPartida);
   actualizarContador();
+  poblarFiltrosPartidas();
   renderizarListaPartidas();
 
   resultadoDiv.innerHTML = `
@@ -309,13 +315,58 @@ function procesarReporte() {
   document.getElementById("input-reporte").value = "";
 }
 
+function poblarFiltrosPartidas() {
+  const selAnio = document.getElementById("filtro-partidas-anio");
+  const valorAnioPrevio = selAnio.value;
+
+  if (DATOS.partidas.length === 0) {
+    selAnio.innerHTML = `<option value="">Sin datos</option>`;
+    document.getElementById("filtro-partidas-mes").innerHTML = `<option value="">Sin datos</option>`;
+    return;
+  }
+
+  const anios = [...new Set(DATOS.partidas.map(p => p.anio))].sort((a, b) => b - a);
+  selAnio.innerHTML = anios.map(a => `<option value="${a}">${a}</option>`).join("");
+  selAnio.value = anios.includes(parseInt(valorAnioPrevio, 10)) ? valorAnioPrevio : anios[0];
+
+  poblarMesesPartidasFiltro();
+}
+
+function poblarMesesPartidasFiltro() {
+  const anio = document.getElementById("filtro-partidas-anio").value;
+  const selMes = document.getElementById("filtro-partidas-mes");
+  const valorMesPrevio = selMes.value;
+
+  const mesesDelAnio = [...new Set(DATOS.partidas.filter(p => p.anio == anio).map(p => String(p.mes).padStart(2, "0")))]
+    .sort().reverse();
+
+  if (mesesDelAnio.length === 0) {
+    selMes.innerHTML = `<option value="">Sin datos</option>`;
+    return;
+  }
+
+  selMes.innerHTML = mesesDelAnio.map(m => `<option value="${m}">${NOMBRES_MES[m]}</option>`).join("");
+  selMes.value = mesesDelAnio.includes(valorMesPrevio) ? valorMesPrevio : mesesDelAnio[0];
+}
+
 function renderizarListaPartidas() {
   const cont = document.getElementById("lista-partidas");
   if (DATOS.partidas.length === 0) {
     cont.innerHTML = `<p class="hint">No hay partidas cargadas.</p>`;
     return;
   }
-  const ordenadas = [...DATOS.partidas].sort((a, b) => claveOrden(b) - claveOrden(a));
+
+  const anio = document.getElementById("filtro-partidas-anio").value;
+  const mes = document.getElementById("filtro-partidas-mes").value;
+
+  const filtradas = DATOS.partidas.filter(p => p.anio == anio && String(p.mes).padStart(2, "0") === mes);
+  const ordenadas = [...filtradas].sort((a, b) => claveOrden(b) - claveOrden(a));
+
+  if (ordenadas.length === 0) {
+    cont.innerHTML = `<p class="hint">No hay partidas para ${NOMBRES_MES[mes] || mes} ${anio}.</p>`;
+    return;
+  }
+
   cont.innerHTML = ordenadas.map(p => `
     <div class="match-item">
       <span>${etiquetaPartida(p)} — ${p.jugadores.map(j => j.nombre).join(", ")}</span>
@@ -328,6 +379,7 @@ function eliminarPartida(id) {
   if (!confirm("¿Eliminar esta partida? Esto no se puede deshacer una vez que descargues y subas el archivo.")) return;
   DATOS.partidas = DATOS.partidas.filter(p => p.id !== id);
   actualizarContador();
+  poblarFiltrosPartidas();
   renderizarListaPartidas();
 }
 

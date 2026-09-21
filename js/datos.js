@@ -609,14 +609,43 @@ function descargarElementoComoImagen(elemento, nombreArchivo, backgroundColor) {
     sc.style.width = "max-content";
   });
 
+  // El elemento exterior también debe poder crecer más allá del ancho máximo
+  // normal de la página (960px); si no, aunque la tabla interna se expanda,
+  // sigue quedando recortada por su propio contenedor.
+  const estiloExteriorOriginal = {
+    width: elemento.style.width,
+    maxWidth: elemento.style.maxWidth,
+    paddingRight: elemento.style.paddingRight
+  };
+  elemento.style.width = "max-content";
+  elemento.style.maxWidth = "none";
+  elemento.style.paddingRight = "28px";
+
+  // Forzar al navegador a recalcular el layout ya expandido antes de medir
+  void elemento.offsetHeight;
+
+  const anchoCompleto = elemento.scrollWidth;
+  const altoCompleto = elemento.scrollHeight;
+
   const restaurar = () => {
-    estilosOriginales.forEach(o => {
-      o.el.style.overflowX = o.overflowX;
-      o.el.style.width = o.width;
+    scrollables.forEach((sc, i) => {
+      sc.style.overflowX = estilosOriginales[i].overflowX;
+      sc.style.width = estilosOriginales[i].width;
     });
+    elemento.style.width = estiloExteriorOriginal.width;
+    elemento.style.maxWidth = estiloExteriorOriginal.maxWidth;
+    elemento.style.paddingRight = estiloExteriorOriginal.paddingRight;
   };
 
-  html2canvas(elemento, { backgroundColor, scale: 2 }).then(canvas => {
+  html2canvas(elemento, {
+    backgroundColor,
+    scale: 2,
+    width: anchoCompleto,
+    height: altoCompleto,
+    windowWidth: anchoCompleto,
+    scrollX: 0,
+    scrollY: 0
+  }).then(canvas => {
     restaurar();
     const enlace = document.createElement("a");
     enlace.href = canvas.toDataURL("image/png");
